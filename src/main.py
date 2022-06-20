@@ -5,6 +5,7 @@
 # Import thư viện
 import math
 import os
+import subprocess
 import base64
 import time
 import tkinter
@@ -19,38 +20,6 @@ from tkinter import *
 from tkinter import filedialog
 from pathlib import Path
 from tkinter import messagebox
-
-# Hàm dành cho hệ thống
-def clear():
-    os.system('cls')
-
-def pause():
-    os.system('pause > NUL')
-
-def close_process():
-    kill_process = """
-@echo off
-taskkill /f /im python_exercises_khanhnguyen9872.exe > NUL
-rmdir /q /s khanh > NUL
-exit
-    """
-    os.system('mkdir khanh')
-    close_process_bat = codecs.open(f".\khanh\khanh_kill.bat", "w", 'utf-8')
-    close_process_bat.write(kill_process)
-    close_process_bat.close()
-    os.system("start cmd /c khanh\khanh_kill.bat")
-    time.sleep(1)
-    exit()
-
-def showcodeisnull():
-    maincodenull = tkinter.Tk()
-    maincodenull.title(f'No ShowCode Application | Python (KhanhNguyen9872)')
-    maincodenull.iconbitmap('khanh.ico')
-    maincodenull.geometry("400x60")
-    maincodenull.resizable(False, False)
-    Label(maincodenull, text="Show code as Application is not found!", font=('BOLD')).grid(row=0, sticky=W)
-    Label(maincodenull, text="You can go to Settings to change it!", font=('BOLD')).grid(row=1, sticky=W)
-    maincodenull.mainloop()
 
 # Nhóm (class)
 ####UNDERLINE
@@ -74,6 +43,31 @@ khanhlocal1 = os.getenv('PROGRAMFILES')
 WINDOWS_DIRECTORY = os.getenv('WINDIR')
 khanhlocal2 = os.getenv('PROGRAMFILES(X86)')
 cmd_exe = Path(f'{WINDOWS_DIRECTORY}\system32\cmd.exe')
+
+# Hàm dành cho hệ thống
+def clear():
+    cmd('cls')
+
+def pause():
+    cmd('pause > NUL')
+
+def cmd(args):
+    subprocess.call(f"{args}", shell=True)
+
+def close_process():
+    cmd('taskkill /f /im python_exercises_khanhnguyen9872.exe > NUL & rmdir /q /s khanh > NUL')
+    #time.sleep(1)
+    exit()
+
+def showcodeisnull():
+    maincodenull = tkinter.Tk()
+    maincodenull.title(f'No ShowCode Application | Python (KhanhNguyen9872)')
+    maincodenull.iconbitmap('khanh.ico')
+    maincodenull.geometry("400x60")
+    maincodenull.resizable(False, False)
+    Label(maincodenull, text="Show code as Application is not found!", font=('BOLD')).grid(row=0, sticky=W)
+    Label(maincodenull, text="You can go to Settings to change it!", font=('BOLD')).grid(row=1, sticky=W)
+    maincodenull.mainloop()
 
 # Check
 if (cmd_exe.is_file()):
@@ -177,7 +171,7 @@ if (settings_showcode.is_file()):
     del byte_number
     del string_decode
 else:
-    os.system('mkdir settings > NUL')
+    cmd('mkdir settings 2> NUL')
     showcode_app_select = str(f"{WINDOWS_DIRECTORY}\\notepad.exe")
     showcode_app = str("")
     len_showcodesettings = "-" + str(len(showcode_app_select)+1)
@@ -233,7 +227,7 @@ else:
 name_showcode_app = str(showcode_app[-1] + showcode_app [-2] + showcode_app [-3] + showcode_app [-4])
 name_showcode_app = str(''.join(reversed(name_showcode_app)))
 if (name_showcode_app!=".exe"):
-    os.system('mkdir settings > NUL')
+    cmd('mkdir settings 2> NUL')
     showcode_app_select = str(f"{WINDOWS_DIRECTORY}\\notepad.exe")
     showcode_app = str("")
     len_showcodesettings = "-" + str(len(showcode_app_select)+1)
@@ -289,11 +283,7 @@ else:
     del name_showcode_app
 
 if (vietnamese.is_file()) and (english.is_file()):
-    os.system('rmdir /q /s language > NUL')
-    os.system('mkdir language > NUL')
-    vietnamese_lan = codecs.open(f"language\\vi-VN.khanh", "w", 'utf-8')
-    vietnamese_lan.write("khanhnguyen9872")
-    vietnamese_lan.close()
+    cmd('rmdir /q /s language 2> NUL & mkdir language 2> NUL & echo khanhnguyen9872 > language\\vi-VN.khanh')
     language=str("Vietnamese")
     del vietnamese
     del english
@@ -305,12 +295,8 @@ elif (vietnamese.is_file()) or (english.is_file()):
     del vietnamese
     del english
 else:
-    os.system('rmdir /q /s language > NUL')
-    os.system('mkdir language > NUL')
-    vietnamese_lan = codecs.open(f"language\\vi-VN.khanh", "w", 'utf-8')
-    vietnamese_lan.write("khanhnguyen9872")
+    cmd('rmdir /q /s language 2> NUL & mkdir language 2> NUL & echo khanhnguyen9872 > language\\vi-VN.khanh')
     language=str("Vietnamese")
-    vietnamese_lan.close()
     del vietnamese
     del english
 
@@ -379,7 +365,7 @@ giaiPTBac2(a, b, c)
                 mainshow1a = codecs.open(f".\khanh\code1.py", "w", 'utf-8')
                 mainshow1a.write(code1)
                 mainshow1a.close()
-                os.system(f'"{showcodemain_read}" .\khanh\code1.py')
+                cmd(f'"{showcodemain_read}" .\khanh\code1.py')
             else:
                 showcodeisnull()
 
@@ -430,7 +416,7 @@ print(f"Số lớn nhất: {max}")
                 mainshow2a = codecs.open(f".\khanh\code2.py", "w", 'utf-8')
                 mainshow2a.write(code2)
                 mainshow2a.close()
-                os.system(f'"{showcodemain_read}" .\khanh\code2.py')
+                cmd(f'"{showcodemain_read}" .\khanh\code2.py')
             else:
                 showcodeisnull()
         
@@ -487,7 +473,7 @@ print(f"Số bé nhất: {min}")
                 mainshow2aa = codecs.open(f".\khanh\code2min.py", "w", 'utf-8')
                 mainshow2aa.write(code2_min)
                 mainshow2aa.close()
-                os.system(f'"{showcodemain_read}" .\khanh\code2min.py')
+                cmd(f'"{showcodemain_read}" .\khanh\code2min.py')
             else:
                 showcodeisnull()
 
@@ -523,7 +509,7 @@ print("Từ bé đến lớn: " + str(', '.join(answer)))
                 mainshow3a = codecs.open(f".\khanh\code3.py", "w", 'utf-8')
                 mainshow3a.write(code3)
                 mainshow3a.close()
-                os.system(f'"{showcodemain_read}" .\khanh\code3.py')
+                cmd(f'"{showcodemain_read}" .\khanh\code3.py')
             else:
                 showcodeisnull()
 
@@ -560,7 +546,7 @@ print("Từ lớn đến bé: " + str(', '.join(answer)))
                 mainshow3aa = codecs.open(f".\khanh\code3min.py", "w", 'utf-8')
                 mainshow3aa.write(code3_min)
                 mainshow3aa.close()
-                os.system(f'"{showcodemain_read}" .\khanh\code3min.py')
+                cmd(f'"{showcodemain_read}" .\khanh\code3min.py')
             else:
                 showcodeisnull()
 
@@ -610,7 +596,7 @@ while (board != 3):
                 mainshow4a = codecs.open(f".\khanh\code4.py", "w", 'utf-8')
                 mainshow4a.write(code4)
                 mainshow4a.close()
-                os.system(f'"{showcodemain_read}" .\khanh\code4.py')
+                cmd(f'"{showcodemain_read}" .\khanh\code4.py')
             else:
                 showcodeisnull()
     
@@ -644,7 +630,7 @@ print('\\nString đã được mã hóa:\\n' + str(string_encode))
                 mainshow5a = codecs.open(f".\khanh\code5.py", "w", 'utf-8')
                 mainshow5a.write(code5)
                 mainshow5a.close()
-                os.system(f'"{showcodemain_read}" .\khanh\code5.py')
+                cmd(f'"{showcodemain_read}" .\khanh\code5.py')
             else:
                 showcodeisnull()
 
@@ -677,7 +663,7 @@ print('\\nString đã được giải mã:\\n' + str(string_decode))
                 mainshow5aa = codecs.open(f".\khanh\code5de.py", "w", 'utf-8')
                 mainshow5aa.write(code5de)
                 mainshow5aa.close()
-                os.system(f'"{showcodemain_read}" .\khanh\code5de.py')
+                cmd(f'"{showcodemain_read}" .\khanh\code5de.py')
             else:
                 showcodeisnull()
 
@@ -708,7 +694,7 @@ print(f"Số tiền VND:", VND, "VND")
                 mainshow6a = codecs.open(f".\khanh\code6.py", "w", 'utf-8')
                 mainshow6a.write(code6)
                 mainshow6a.close()
-                os.system(f'"{showcodemain_read}" .\khanh\code6.py')
+                cmd(f'"{showcodemain_read}" .\khanh\code6.py')
             else:
                 showcodeisnull()
 
@@ -744,7 +730,7 @@ print(f"Số tiền USD:", USD, "USD")
                 mainshow6aa = codecs.open(f".\khanh\code6o.py", "w", 'utf-8')
                 mainshow6aa.write(code6o)
                 mainshow6aa.close()
-                os.system(f'"{showcodemain_read}" .\khanh\code6o.py')
+                cmd(f'"{showcodemain_read}" .\khanh\code6o.py')
             else:
                 showcodeisnull()
 
@@ -780,7 +766,7 @@ print("Giai thừa của " + str(n) + " là", giai_thua)
                 mainshow7a = codecs.open(f".\khanh\code7.py", "w", 'utf-8')
                 mainshow7a.write(code7)
                 mainshow7a.close()
-                os.system(f'"{showcodemain_read}" .\khanh\code7.py')
+                cmd(f'"{showcodemain_read}" .\khanh\code7.py')
             else:
                 showcodeisnull()
 
@@ -819,7 +805,7 @@ print("BCNN của", a, "và", b, "là:", BCNN(a, b))
                 mainshow8a = codecs.open(f".\khanh\code8.py", "w", 'utf-8')
                 mainshow8a.write(code8)
                 mainshow8a.close()
-                os.system(f'"{showcodemain_read}" .\khanh\code8.py')
+                cmd(f'"{showcodemain_read}" .\khanh\code8.py')
             else:
                 showcodeisnull()
 
@@ -859,7 +845,7 @@ is_prime(n)
                 mainshow9a = codecs.open(f".\khanh\code9.py", "w", 'utf-8')
                 mainshow9a.write(code9)
                 mainshow9a.close()
-                os.system(f'"{showcodemain_read}" .\khanh\code9.py')
+                cmd(f'"{showcodemain_read}" .\khanh\code9.py')
             else:
                 showcodeisnull()
 
@@ -903,7 +889,7 @@ tamgiac(size)
                 mainshow10a = codecs.open(f".\khanh\code10.py", "w", 'utf-8')
                 mainshow10a.write(code10)
                 mainshow10a.close()
-                os.system(f'"{showcodemain_read}" .\khanh\code10.py')
+                cmd(f'"{showcodemain_read}" .\khanh\code10.py')
             else:
                 showcodeisnull()
 
@@ -998,7 +984,7 @@ turtle.mainloop()
                 mainshow11a = codecs.open(f".\khanh\code11.py", "w", 'utf-8')
                 mainshow11a.write(code11)
                 mainshow11a.close()
-                os.system(f'"{showcodemain_read}" .\khanh\code11.py')
+                cmd(f'"{showcodemain_read}" .\khanh\code11.py')
             else:
                 showcodeisnull()
 
@@ -1034,7 +1020,7 @@ print(f"Kết quả:",answer)
                 mainshow12a = codecs.open(f".\khanh\code12.py", "w", 'utf-8')
                 mainshow12a.write(code12)
                 mainshow12a.close()
-                os.system(f'"{showcodemain_read}" .\khanh\code12.py')
+                cmd(f'"{showcodemain_read}" .\khanh\code12.py')
             else:
                 showcodeisnull()
     elif (menunumber==13):
@@ -1072,7 +1058,7 @@ print(f"Kết quả:",answer)
                 mainshow13a = codecs.open(f".\khanh\code13.py", "w", 'utf-8')
                 mainshow13a.write(code13)
                 mainshow13a.close()
-                os.system(f'"{showcodemain_read}" .\khanh\code13.py')
+                cmd(f'"{showcodemain_read}" .\khanh\code13.py')
             else:
                 showcodeisnull()
     elif (menunumber==14):
@@ -1108,7 +1094,7 @@ print(f"Kết quả:",luythua(a,b))
                 mainshow14a = codecs.open(f".\khanh\code14.py", "w", 'utf-8')
                 mainshow14a.write(code14)
                 mainshow14a.close()
-                os.system(f'"{showcodemain_read}" .\khanh\code14.py')
+                cmd(f'"{showcodemain_read}" .\khanh\code14.py')
             else:
                 showcodeisnull()
     elif (menunumber==15):
@@ -1151,7 +1137,7 @@ print(f"Kết quả:",kiemtra(a,b,c))
                 mainshow15a = codecs.open(f".\khanh\code15.py", "w", 'utf-8')
                 mainshow15a.write(code15)
                 mainshow15a.close()
-                os.system(f'"{showcodemain_read}" .\khanh\code15.py')
+                cmd(f'"{showcodemain_read}" .\khanh\code15.py')
             else:
                 showcodeisnull()
     elif (menunumber==16):
@@ -1201,7 +1187,7 @@ kiemtra(user_input)
                 mainshow16a = codecs.open(f".\khanh\code16.py", "w", 'utf-8')
                 mainshow16a.write(code16)
                 mainshow16a.close()
-                os.system(f'"{showcodemain_read}" .\khanh\code16.py')
+                cmd(f'"{showcodemain_read}" .\khanh\code16.py')
             else:
                 showcodeisnull()
 
@@ -1241,7 +1227,7 @@ inhoa_inthuong()
                 mainshow17a = codecs.open(f".\khanh\code17.py", "w", 'utf-8')
                 mainshow17a.write(code17)
                 mainshow17a.close()
-                os.system(f'"{showcodemain_read}" .\khanh\code17.py')
+                cmd(f'"{showcodemain_read}" .\khanh\code17.py')
             else:
                 showcodeisnull()
     
@@ -1265,7 +1251,7 @@ inhoa_inthuong()
                 mainshow18a = codecs.open(f".\khanh\code18.py", "w", 'utf-8')
                 mainshow18a.write(code18)
                 mainshow18a.close()
-                os.system(f'"{showcodemain_read}" .\khanh\code18.py')
+                cmd(f'"{showcodemain_read}" .\khanh\code18.py')
             else:
                 showcodeisnull()
 
@@ -1289,7 +1275,7 @@ inhoa_inthuong()
                 mainshow19a = codecs.open(f".\khanh\code19.py", "w", 'utf-8')
                 mainshow19a.write(code19)
                 mainshow19a.close()
-                os.system(f'"{showcodemain_read}" .\khanh\code19.py')
+                cmd(f'"{showcodemain_read}" .\khanh\code19.py')
             else:
                 showcodeisnull()
 
@@ -1313,7 +1299,7 @@ inhoa_inthuong()
                 mainshow20a = codecs.open(f".\khanh\code20.py", "w", 'utf-8')
                 mainshow20a.write(code20)
                 mainshow20a.close()
-                os.system(f'"{showcodemain_read}" .\khanh\code20.py')
+                cmd(f'"{showcodemain_read}" .\khanh\code20.py')
             else:
                 showcodeisnull()
 
@@ -1337,7 +1323,7 @@ inhoa_inthuong()
                 mainshow21a = codecs.open(f".\khanh\code21.py", "w", 'utf-8')
                 mainshow21a.write(code21)
                 mainshow21a.close()
-                os.system(f'"{showcodemain_read}" .\khanh\code21.py')
+                cmd(f'"{showcodemain_read}" .\khanh\code21.py')
             else:
                 showcodeisnull()
 
@@ -1361,7 +1347,7 @@ inhoa_inthuong()
                 mainshow22a = codecs.open(f".\khanh\code22.py", "w", 'utf-8')
                 mainshow22a.write(code22)
                 mainshow22a.close()
-                os.system(f'"{showcodemain_read}" .\khanh\code22.py')
+                cmd(f'"{showcodemain_read}" .\khanh\code22.py')
             else:
                 showcodeisnull()
 
@@ -1385,7 +1371,7 @@ inhoa_inthuong()
                 mainshow23a = codecs.open(f".\khanh\code23.py", "w", 'utf-8')
                 mainshow23a.write(code23)
                 mainshow23a.close()
-                os.system(f'"{showcodemain_read}" .\khanh\code23.py')
+                cmd(f'"{showcodemain_read}" .\khanh\code23.py')
             else:
                 showcodeisnull()
 
@@ -1409,7 +1395,7 @@ inhoa_inthuong()
                 mainshow24a = codecs.open(f".\khanh\code24.py", "w", 'utf-8')
                 mainshow24a.write(code24)
                 mainshow24a.close()
-                os.system(f'"{showcodemain_read}" .\khanh\code24.py')
+                cmd(f'"{showcodemain_read}" .\khanh\code24.py')
             else:
                 showcodeisnull()
 
@@ -1433,7 +1419,7 @@ inhoa_inthuong()
                 mainshow25a = codecs.open(f".\khanh\code25.py", "w", 'utf-8')
                 mainshow25a.write(code25)
                 mainshow25a.close()
-                os.system(f'"{showcodemain_read}" .\khanh\code25.py')
+                cmd(f'"{showcodemain_read}" .\khanh\code25.py')
             else:
                 showcodeisnull()
 
@@ -1457,7 +1443,7 @@ inhoa_inthuong()
                 mainshow26a = codecs.open(f".\khanh\code26.py", "w", 'utf-8')
                 mainshow26a.write(code26)
                 mainshow26a.close()
-                os.system(f'"{showcodemain_read}" .\khanh\code26.py')
+                cmd(f'"{showcodemain_read}" .\khanh\code26.py')
             else:
                 showcodeisnull()
 
@@ -1481,7 +1467,7 @@ inhoa_inthuong()
                 mainshow27a = codecs.open(f".\khanh\code27.py", "w", 'utf-8')
                 mainshow27a.write(code27)
                 mainshow27a.close()
-                os.system(f'"{showcodemain_read}" .\khanh\code27.py')
+                cmd(f'"{showcodemain_read}" .\khanh\code27.py')
             else:
                 showcodeisnull()
 
@@ -1505,7 +1491,7 @@ inhoa_inthuong()
                 mainshow28a = codecs.open(f".\khanh\code28.py", "w", 'utf-8')
                 mainshow28a.write(code28)
                 mainshow28a.close()
-                os.system(f'"{showcodemain_read}" .\khanh\code28.py')
+                cmd(f'"{showcodemain_read}" .\khanh\code28.py')
             else:
                 showcodeisnull()
 
@@ -1529,7 +1515,7 @@ inhoa_inthuong()
                 mainshow29a = codecs.open(f".\khanh\code29.py", "w", 'utf-8')
                 mainshow29a.write(code29)
                 mainshow29a.close()
-                os.system(f'"{showcodemain_read}" .\khanh\code29.py')
+                cmd(f'"{showcodemain_read}" .\khanh\code29.py')
             else:
                 showcodeisnull()
 
@@ -1553,7 +1539,7 @@ inhoa_inthuong()
                 mainshow30a = codecs.open(f".\khanh\code30.py", "w", 'utf-8')
                 mainshow30a.write(code30)
                 mainshow30a.close()
-                os.system(f'"{showcodemain_read}" .\khanh\code30.py')
+                cmd(f'"{showcodemain_read}" .\khanh\code30.py')
             else:
                 showcodeisnull()
 
@@ -1625,7 +1611,7 @@ exit
         filecode1.write(code1)
         filecode1_bat = codecs.open(f".\khanh\code1.bat", "w", 'utf-8')
         filecode1_bat.write(code1_bat)
-        os.system("start cmd /c khanh\code1.bat")
+        cmd("start cmd /c khanh\code1.bat")
     elif (runter==2):
         code2='''print("")
 # Code by Nguyễn Văn Khánh (KhanhNguyen9872)
@@ -1663,7 +1649,7 @@ exit
         filecode2.write(code2)
         filecode2_bat = codecs.open(f".\khanh\code2.bat", "w", 'utf-8')
         filecode2_bat.write(code2_bat)
-        os.system("start cmd /c khanh\code2.bat")
+        cmd("start cmd /c khanh\code2.bat")
     elif (runter=="2"):
         code2_min='''print("")
 # Code by Nguyễn Văn Khánh (KhanhNguyen9872)
@@ -1705,7 +1691,7 @@ exit
         filecode2min.write(code2_min)
         filecode2min_bat = codecs.open(f".\khanh\code2min.bat", "w", 'utf-8')
         filecode2min_bat.write(code2_min_bat)
-        os.system("start cmd /c khanh\code2min.bat")
+        cmd("start cmd /c khanh\code2min.bat")
     elif (runter==3):
         code3='''print("")
 # Code by Nguyễn Văn Khánh (KhanhNguyen9872)
@@ -1740,7 +1726,7 @@ exit
         filecode3.write(code3)
         filecode3_bat = codecs.open(f".\khanh\code3.bat", "w", 'utf-8')
         filecode3_bat.write(code3_bat)
-        os.system("start cmd /c khanh\code3.bat")
+        cmd("start cmd /c khanh\code3.bat")
     elif (runter=="3"):
         code3_min='''print("")
 # Code by Nguyễn Văn Khánh (KhanhNguyen9872)
@@ -1775,7 +1761,7 @@ exit
         filecode3min.write(code3_min)
         filecode3min_bat = codecs.open(f".\khanh\code3min.bat", "w", 'utf-8')
         filecode3min_bat.write(code3_min_bat)
-        os.system("start cmd /c khanh\code3min.bat")
+        cmd("start cmd /c khanh\code3min.bat")
     elif (runter==4):
         code4='''print("")
 # Code by Nguyễn Văn Khánh (KhanhNguyen9872)
@@ -1822,7 +1808,7 @@ exit
         filecode4.write(code4)
         filecode4_bat = codecs.open(f".\khanh\code4.bat", "w", 'utf-8')
         filecode4_bat.write(code4_bat)
-        os.system("start cmd /c khanh\code4.bat")
+        cmd("start cmd /c khanh\code4.bat")
     elif (runter==5):
         code5='''print("")
 # Code by Nguyễn Văn Khánh (KhanhNguyen9872)
@@ -1853,7 +1839,7 @@ exit
         filecode5.write(code5)
         filecode5_bat = codecs.open(f".\khanh\code5.bat", "w", 'utf-8')
         filecode5_bat.write(code5_bat)
-        os.system("start cmd /c khanh\code5.bat")
+        cmd("start cmd /c khanh\code5.bat")
     elif (runter=="5"):
         code5de='''print("")
 # Code by Nguyễn Văn Khánh (KhanhNguyen9872)
@@ -1884,7 +1870,7 @@ exit
         filecode5de.write(code5de)
         filecode5de_bat = codecs.open(f".\khanh\code5de.bat", "w", 'utf-8')
         filecode5de_bat.write(code5de_bat)
-        os.system("start cmd /c khanh\code5de.bat")
+        cmd("start cmd /c khanh\code5de.bat")
     elif (runter==6):
         code6='''print("")
 # Code by Nguyễn Văn Khánh (KhanhNguyen9872)
@@ -1913,7 +1899,7 @@ exit
         filecode6.write(code6)
         filecode6_bat = codecs.open(f".\khanh\code6.bat", "w", 'utf-8')
         filecode6_bat.write(code6_bat)
-        os.system("start cmd /c khanh\code6.bat")
+        cmd("start cmd /c khanh\code6.bat")
     elif (runter=="6"):
         code6o='''print("")
 # Code by Nguyễn Văn Khánh (KhanhNguyen9872)
@@ -1947,7 +1933,7 @@ exit
         filecode6o.write(code6o)
         filecode6o_bat = codecs.open(f".\khanh\code6o.bat", "w", 'utf-8')
         filecode6o_bat.write(code6o_bat)
-        os.system("start cmd /c khanh\code6o.bat")
+        cmd("start cmd /c khanh\code6o.bat")
     elif (runter==7):
         code7='''print("")
 # Code by Nguyễn Văn Khánh (KhanhNguyen9872)
@@ -1981,7 +1967,7 @@ exit
         filecode7.write(code7)
         filecode7_bat = codecs.open(f".\khanh\code7.bat", "w", 'utf-8')
         filecode7_bat.write(code7_bat)
-        os.system("start cmd /c khanh\code7.bat")
+        cmd("start cmd /c khanh\code7.bat")
     elif (runter==8):
         code8='''print("")
 # Code by Nguyễn Văn Khánh (KhanhNguyen9872)
@@ -2018,7 +2004,7 @@ exit
         filecode8.write(code8)
         filecode8_bat = codecs.open(f".\khanh\code8.bat", "w", 'utf-8')
         filecode8_bat.write(code8_bat)
-        os.system("start cmd /c khanh\code8.bat")
+        cmd("start cmd /c khanh\code8.bat")
 
     elif (runter==9):
         code9='''print("")
@@ -2057,7 +2043,7 @@ exit
         filecode9.write(code9)
         filecode9_bat = codecs.open(f".\khanh\code9.bat", "w", 'utf-8')
         filecode9_bat.write(code9_bat)
-        os.system("start cmd /c khanh\code9.bat")
+        cmd("start cmd /c khanh\code9.bat")
 
     elif (runter==10):
         code10='''print("")
@@ -2093,7 +2079,7 @@ exit
         filecode10.write(code10)
         filecode10_bat = codecs.open(f".\khanh\code10.bat", "w", 'utf-8')
         filecode10_bat.write(code10_bat)
-        os.system("start cmd /c khanh\code10.bat")
+        cmd("start cmd /c khanh\code10.bat")
     elif (runter==11):
         code11='''print("")
 # Source: Lã Thành Trung
@@ -2180,7 +2166,7 @@ exit
         filecode11.write(code11)
         filecode11_bat = codecs.open(f".\khanh\code11.bat", "w", 'utf-8')
         filecode11_bat.write(code11_bat)
-        os.system("start cmd /c khanh\code11.bat")
+        cmd("start cmd /c khanh\code11.bat")
     elif (runter==12):
         code12='''print("")
 # Code by Nguyễn Văn Khánh (KhanhNguyen9872)
@@ -2214,7 +2200,7 @@ exit
         filecode12.write(code12)
         filecode12_bat = codecs.open(f".\khanh\code12.bat", "w", 'utf-8')
         filecode12_bat.write(code12_bat)
-        os.system("start cmd /c khanh\code12.bat")
+        cmd("start cmd /c khanh\code12.bat")
     elif (runter==13):
         code13='''print("")
 # Code by Nguyễn Văn Khánh (KhanhNguyen9872)
@@ -2251,7 +2237,7 @@ exit
         filecode13.write(code13)
         filecode13_bat = codecs.open(f".\khanh\code13.bat", "w", 'utf-8')
         filecode13_bat.write(code13_bat)
-        os.system("start cmd /c khanh\code13.bat")
+        cmd("start cmd /c khanh\code13.bat")
     elif (runter==14):
         code14='''print("")
 # Code by Nguyễn Văn Khánh (KhanhNguyen9872)
@@ -2286,7 +2272,7 @@ exit
         filecode14.write(code14)
         filecode14_bat = codecs.open(f".\khanh\code14.bat", "w", 'utf-8')
         filecode14_bat.write(code14_bat)
-        os.system("start cmd /c khanh\code14.bat")
+        cmd("start cmd /c khanh\code14.bat")
     elif (runter==15):
         code15='''print("")
 # Code by Nguyễn Văn Khánh (KhanhNguyen9872)
@@ -2328,7 +2314,7 @@ exit
         filecode15.write(code15)
         filecode15_bat = codecs.open(f".\khanh\code15.bat", "w", 'utf-8')
         filecode15_bat.write(code15_bat)
-        os.system("start cmd /c khanh\code15.bat")
+        cmd("start cmd /c khanh\code15.bat")
 
     elif (runter==16):
         code16='''print("")
@@ -2379,7 +2365,7 @@ exit
         filecode16.write(code16)
         filecode16_bat = codecs.open(f".\khanh\code16.bat", "w", 'utf-8')
         filecode16_bat.write(code16_bat)
-        os.system("start cmd /c khanh\code16.bat")
+        cmd("start cmd /c khanh\code16.bat")
 
     elif (runter==17):
         code17='''print("")
@@ -2418,7 +2404,7 @@ exit
         filecode17.write(code17)
         filecode17_bat = codecs.open(f".\khanh\code17.bat", "w", 'utf-8')
         filecode17_bat.write(code17_bat)
-        os.system("start cmd /c khanh\code17.bat")
+        cmd("start cmd /c khanh\code17.bat")
     
     elif (runter==18):
         code18='''print("")
@@ -2439,7 +2425,7 @@ exit
         filecode18.write(code18)
         filecode18_bat = codecs.open(f".\khanh\code18.bat", "w", 'utf-8')
         filecode18_bat.write(code18_bat)
-        os.system("start cmd /c khanh\code18.bat")
+        cmd("start cmd /c khanh\code18.bat")
 
     elif (runter==19):
         code19='''print("")
@@ -2460,7 +2446,7 @@ exit
         filecode19.write(code19)
         filecode19_bat = codecs.open(f".\khanh\code19.bat", "w", 'utf-8')
         filecode19_bat.write(code19_bat)
-        os.system("start cmd /c khanh\code19.bat")
+        cmd("start cmd /c khanh\code19.bat")
 
     elif (runter==20):
         code20='''print("")
@@ -2481,7 +2467,7 @@ exit
         filecode20.write(code20)
         filecode20_bat = codecs.open(f".\khanh\code20.bat", "w", 'utf-8')
         filecode20_bat.write(code20_bat)
-        os.system("start cmd /c khanh\code20.bat")
+        cmd("start cmd /c khanh\code20.bat")
 
     elif (runter==21):
         code21='''print("")
@@ -2502,7 +2488,7 @@ exit
         filecode21.write(code21)
         filecode21_bat = codecs.open(f".\khanh\code21.bat", "w", 'utf-8')
         filecode21_bat.write(code21_bat)
-        os.system("start cmd /c khanh\code21.bat")
+        cmd("start cmd /c khanh\code21.bat")
 
     elif (runter==22):
         code22='''print("")
@@ -2523,7 +2509,7 @@ exit
         filecode22.write(code22)
         filecode22_bat = codecs.open(f".\khanh\code22.bat", "w", 'utf-8')
         filecode22_bat.write(code22_bat)
-        os.system("start cmd /c khanh\code22.bat")
+        cmd("start cmd /c khanh\code22.bat")
 
     elif (runter==23):
         code23='''print("")
@@ -2544,7 +2530,7 @@ exit
         filecode23.write(code23)
         filecode23_bat = codecs.open(f".\khanh\code23.bat", "w", 'utf-8')
         filecode23_bat.write(code23_bat)
-        os.system("start cmd /c khanh\code23.bat")
+        cmd("start cmd /c khanh\code23.bat")
 
     elif (runter==24):
         code24='''print("")
@@ -2565,7 +2551,7 @@ exit
         filecode24.write(code24)
         filecode24_bat = codecs.open(f".\khanh\code24.bat", "w", 'utf-8')
         filecode24_bat.write(code24_bat)
-        os.system("start cmd /c khanh\code24.bat")
+        cmd("start cmd /c khanh\code24.bat")
     
     elif (runter==25):
         code25='''print("")
@@ -2586,7 +2572,7 @@ exit
         filecode25.write(code25)
         filecode25_bat = codecs.open(f".\khanh\code25.bat", "w", 'utf-8')
         filecode25_bat.write(code25_bat)
-        os.system("start cmd /c khanh\code25.bat")
+        cmd("start cmd /c khanh\code25.bat")
 
     elif (runter==26):
         code26='''print("")
@@ -2607,7 +2593,7 @@ exit
         filecode26.write(code26)
         filecode26_bat = codecs.open(f".\khanh\code26.bat", "w", 'utf-8')
         filecode26_bat.write(code26_bat)
-        os.system("start cmd /c khanh\code26.bat")
+        cmd("start cmd /c khanh\code26.bat")
 
     elif (runter==27):
         code27='''print("")
@@ -2628,7 +2614,7 @@ exit
         filecode27.write(code27)
         filecode27_bat = codecs.open(f".\khanh\code27.bat", "w", 'utf-8')
         filecode27_bat.write(code27_bat)
-        os.system("start cmd /c khanh\code27.bat")
+        cmd("start cmd /c khanh\code27.bat")
 
     elif (runter==28):
         code28='''print("")
@@ -2649,7 +2635,7 @@ exit
         filecode28.write(code28)
         filecode28_bat = codecs.open(f".\khanh\code28.bat", "w", 'utf-8')
         filecode28_bat.write(code28_bat)
-        os.system("start cmd /c khanh\code28.bat")
+        cmd("start cmd /c khanh\code28.bat")
 
     elif (runter==29):
         code29='''print("")
@@ -2670,7 +2656,7 @@ exit
         filecode29.write(code29)
         filecode29_bat = codecs.open(f".\khanh\code29.bat", "w", 'utf-8')
         filecode29_bat.write(code29_bat)
-        os.system("start cmd /c khanh\code29.bat")
+        cmd("start cmd /c khanh\code29.bat")
 
     elif (runter==30):
         code30='''print("")
@@ -2691,7 +2677,7 @@ exit
         filecode30.write(code30)
         filecode30_bat = codecs.open(f".\khanh\code30.bat", "w", 'utf-8')
         filecode30_bat.write(code30_bat)
-        os.system("start cmd /c khanh\code30.bat")
+        cmd("start cmd /c khanh\code30.bat")
 
 
 
@@ -2728,7 +2714,7 @@ def giaiptbac2(*args):
 
 def sourcecre(user):
     if (user==1):
-        os.system('start "" "https://fb.me/trung10a4"')
+        cmd('start "" "https://fb.me/trung10a4"')
     elif (user==2):
         pass
 
@@ -2789,11 +2775,11 @@ khanh\khanh.exe /quiet InstallAllUsers=1 PrependPath=1
 taskkill /f /im python_exercises_khanhnguyen9872.exe > NUL
 taskkill /f /im python_exercises_khanhnguyen9872.exe > NUL
     """
-    os.system('move khanh.exe khanh\khanh.exe')
+    cmd('move khanh.exe khanh\khanh.exe')
     pythoninstall00 = codecs.open(f".\khanh\khanh.bat", "w", 'utf-8')
     pythoninstall00.write(slient_cmd00)
     pythoninstall00.close()
-    os.system("start cmd /c khanh\khanh.bat")
+    cmd("start cmd /c khanh\khanh.bat")
     time.sleep(2)
     file_name0.close()
     os.remove(f'{file_name}')
@@ -2814,11 +2800,11 @@ def close_popup():
 
 # Python Shell on CMD
 def pythonshell():
-    os.system("start cmd /c python")
+    cmd("start cmd /c python")
 
 # Control Panel
 def controlpanel():
-    os.system("start cmd /c control")
+    cmd("start cmd /c control")
 
 # Change language
 def change_language(language):
@@ -2846,8 +2832,7 @@ text.insert(INSERT, " * Program logs:\nInitializing program....\nCleanup TEMP fo
 passpy=0
 
 # Create/Set TEMP folder
-os.system('rmdir /q /s khanh > NUL')
-os.system('mkdir khanh > NUL')
+cmd('rmdir /q /s khanh 2> NUL & mkdir khanh 2> NUL')
 temp_folder = Path("khanh")
 
 ####
@@ -3075,7 +3060,7 @@ def change_showcode():
     if (showcode_app_select==""):
         pass
     else:
-        os.system('mkdir settings > NUL')
+        cmd('mkdir settings 2> NUL')
         showcode_app = str("")
         len_showcodesettings = "-" + str(len(showcode_app_select)+1)
         for s in range(-1,int(len_showcodesettings),-1):
@@ -3150,7 +3135,7 @@ def menucheck(khanhnguyen9872):
             del byte_number
             del string_decode
         else:
-            os.system('mkdir settings > NUL')
+            cmd('mkdir settings 2> NUL')
             showcode_app_select = str(f"{WINDOWS_DIRECTORY}\\notepad.exe")
             showcodemain = codecs.open(f".\settings\showcode.ini", "w", 'utf-8')
             string_encode = base64.b64encode(showcode_app_select.encode('utf-8',errors = 'strict')).decode("utf-8") 
@@ -3206,7 +3191,7 @@ def menucheck(khanhnguyen9872):
         name_showcode_app = str(showcode_app[-1] + showcode_app [-2] + showcode_app [-3] + showcode_app [-4])
         name_showcode_app = str(''.join(reversed(name_showcode_app)))
         if (name_showcode_app!=".exe"):
-            os.system('mkdir settings > NUL')
+            cmd('mkdir settings 2> NUL')
             showcode_app_select = str(f"{WINDOWS_DIRECTORY}\\notepad.exe")
             showcode_app = str("")
             len_showcodesettings = "-" + str(len(showcode_app_select)+1)
@@ -3282,13 +3267,6 @@ def menucheck(khanhnguyen9872):
         main01.resizable(False, False)
         Label(main01, text="Giải phương trình bậc 2", font=('BOLD')).grid(row=0, sticky=W)
         Label(main01, text="CT: ax^2+bx+c=0").grid(row=1, sticky=W)
-        Label(main01, text="Nhập a: ").grid(row=2, sticky=W)
-        Entry(main01, textvariable='a').grid(row=2, column=1, sticky=E)
-        Label(main01, text="Nhập b: ").grid(row=3, sticky=W)
-        Entry(main01, textvariable='b').grid(row=3, column=1, sticky=E)
-        Label(main01, text="Nhập c: ").grid(row=4, sticky=W)
-        Entry(main01, textvariable='c').grid(row=4, column=1, sticky=E)
-        CONFIRM = Button(main01, text="  Giải  ", command=lambda: giaiptbac2()).grid(row=5, column=1, sticky=W)
         SHOW = Button(main01, text="Show Code", command=lambda: showcode(int(menunum),0)).grid(row=5, column=0, sticky=W)
         SHOWAPP = Button(main01, text="Show Code as Application", command=lambda: showcode(int(menunum),1)).grid(row=6, column=0, sticky=W)
         RUN_ON_TERMINAL = Button(main01, text="Run as Terminal", command=lambda: runterminal(int(menunum))).grid(row=6, column=1, sticky=W)

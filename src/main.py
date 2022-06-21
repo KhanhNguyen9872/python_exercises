@@ -202,7 +202,7 @@ def showcode_withapp(showcodemain_read,main_name,pycode):
             exec(f"""{main_name} = codecs.open(f".\khanh\{pycode}.py", "w", 'utf-8')""")
             exec(f"""{main_name}.write({pycode})""")
             exec(f"""{main_name}.close()""")
-            cmd(f"{showcodemain_read} .\khanh\{pycode}.py")
+            cmd(f'''"{showcodemain_read}" .\khanh\{pycode}.py''')
         else:
             exec(f"""{main_name} = codecs.open(f"./khanh/{pycode}.py", "w", 'utf-8')""")
             exec(f"""{main_name}.write({pycode})""")

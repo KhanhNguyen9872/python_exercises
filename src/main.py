@@ -1031,47 +1031,48 @@ def sourcecre(user):
         pass
 
 # Python Official Website
-def pythonofficial(winver,winbit):
+def pythonofficial(winver,winbit,win_or_linux):
     maininstall = tkinter.Tk()
     maininstall.title(f'Install Python | Python (KhanhNguyen9872)')
-    maininstall.iconbitmap('khanh.ico')
-    maininstall.geometry("520x180")
-    maininstall.resizable(False, False)
-    textinstall = Text(maininstall)
-    textinstall.insert(INSERT, "Detecting Windows...\n")
-    if (winbit=="AMD64"):
-        python_ver="-amd64"
-        winbit="64"
-    else:
-        python_ver=""
-        winbit="32"
-    if (winver=="7"):
-        file_name = "python_version.txt"
-        url = "https://raw.githubusercontent.com/KhanhNguyen9872/python_exercises/main/python_version_win7.txt"
-        urllib.request.urlretrieve(url, file_name)
-        with open(f"{file_name}",'r',encoding='utf-8') as file_name0:
-            pyver000=str(file_name0.read())
-        textinstall.insert(INSERT, f"Found: Windows {winver} ({winbit}bit)\n\n")
-        textinstall.insert(INSERT, f"Getting version....\n")
-        textinstall.insert(INSERT, f"Found: {pyver000}\n")
-    else:
-        file_name = "python_version.txt"
-        url = "https://raw.githubusercontent.com/KhanhNguyen9872/python_exercises/main/python_version.txt"
-        urllib.request.urlretrieve(url, file_name)
-        with open(f"{file_name}",'r',encoding='utf-8') as file_name0:
-            pyver000=str(file_name0.read())
-        textinstall.insert(INSERT, f"Found: Windows {winver} {winbit}bit\n\n")
-        textinstall.insert(INSERT, f"Getting version....\n")
-        textinstall.insert(INSERT, f"Found: {pyver000}\n")
-        
-    textinstall.insert(INSERT, f"\nDownloading Python v{pyver000}....\n")
-    textinstall.insert(INSERT, f"Installing Python v{pyver000}....\n")
-    textinstall.insert(INSERT, f"When the installation is completed! You can close this window!\n")
-    textinstall.pack()
-    url_python = str(f"https://www.python.org/ftp/python/{pyver000}/python-{pyver000}{python_ver}.exe")
-    file_name_python = "khanh.exe"
-    urllib.request.urlretrieve(url_python, file_name_python)
-    slient_cmd00 = f"""@echo off
+    if (os.name == 'nt'):
+        maininstall.iconbitmap('khanh.ico')
+        maininstall.geometry("520x180")
+        maininstall.resizable(False, False)
+        textinstall = Text(maininstall)
+        textinstall.insert(INSERT, "Detecting Windows...\n")
+        if (winbit=="AMD64"):
+            python_ver="-amd64"
+            winbit="64"
+        else:
+            python_ver=""
+            winbit="32"
+        if (winver=="7"):
+            file_name = "python_version.txt"
+            url = "https://raw.githubusercontent.com/KhanhNguyen9872/python_exercises/main/python_version_win7.txt"
+            urllib.request.urlretrieve(url, file_name)
+            with open(f"{file_name}",'r',encoding='utf-8') as file_name0:
+                pyver000=str(file_name0.read())
+            textinstall.insert(INSERT, f"Found: Windows {winver} ({winbit}bit)\n\n")
+            textinstall.insert(INSERT, f"Getting version....\n")
+            textinstall.insert(INSERT, f"Found: {pyver000}\n")
+        else:
+            file_name = "python_version.txt"
+            url = "https://raw.githubusercontent.com/KhanhNguyen9872/python_exercises/main/python_version.txt"
+            urllib.request.urlretrieve(url, file_name)
+            with open(f"{file_name}",'r',encoding='utf-8') as file_name0:
+                pyver000=str(file_name0.read())
+            textinstall.insert(INSERT, f"Found: Windows {winver} {winbit}bit\n\n")
+            textinstall.insert(INSERT, f"Getting version....\n")
+            textinstall.insert(INSERT, f"Found: {pyver000}\n")
+            
+        textinstall.insert(INSERT, f"\nDownloading Python v{pyver000}....\n")
+        textinstall.insert(INSERT, f"Installing Python v{pyver000}....\n")
+        textinstall.insert(INSERT, f"When the installation is completed! You can close this window!\n")
+        textinstall.pack()
+        url_python = str(f"https://www.python.org/ftp/python/{pyver000}/python-{pyver000}{python_ver}.exe")
+        file_name_python = "khanh.exe"
+        urllib.request.urlretrieve(url_python, file_name_python)
+        slient_cmd00 = f"""@echo off
 TITLE Install Python v{pyver000} - KhanhNguyen9872
 color 17
 mode con:cols=100 lines=16
@@ -1086,18 +1087,28 @@ echo.
 khanh\khanh.exe /quiet InstallAllUsers=1 PrependPath=1
 taskkill /f /im python_exercises_khanhnguyen9872.exe > NUL
 taskkill /f /im python_exercises_khanhnguyen9872.exe > NUL
-    """
-    cmd('move khanh.exe khanh\khanh.exe')
-    pythoninstall00 = codecs.open(f".\khanh\khanh.bat", "w", 'utf-8')
-    pythoninstall00.write(slient_cmd00)
-    pythoninstall00.close()
-    cmd("start cmd /c khanh\khanh.bat")
-    time.sleep(2)
-    file_name0.close()
-    rm(f'{file_name}')
-    maininstall.mainloop()
-    time.sleep(0)
-    exit()
+        """
+        cmd('move khanh.exe khanh\khanh.exe')
+        pythoninstall00 = codecs.open(f".\khanh\khanh.bat", "w", 'utf-8')
+        pythoninstall00.write(slient_cmd00)
+        pythoninstall00.close()
+        cmd("start cmd /c khanh\khanh.bat")
+        time.sleep(2)
+        file_name0.close()
+        rm(f'{file_name}')
+        maininstall.mainloop()
+        time.sleep(0)
+        exit()
+    else:
+        temp=f"""#!/bin/bash
+clear
+sudo apt install python3 python3-pip -y
+read -p "Press Enter to Exit! " pause
+exit 0      
+        """
+        exec(f"""{main_name}_bat = codecs.open(f"./khanh/{pycode}.sh", "w", 'utf-8')""")
+        exec(f"""{main_name}_bat.write(temp)""")
+        os.system(f"""{terminal} -e 'bash ./khanh/{pycode}.sh' 2> /dev/null &> /dev/null &""")
 
 # Restart popup
 def close_popup():
@@ -1181,7 +1192,10 @@ if (os.name == 'nt'):
             showcodemain_read=str(f"")
             showcodeapp=str(f"")
         del checknotepad
-    pyver = str(subprocess.check_output("python --version", shell=True).rstrip().decode("utf-8"))
+    try:
+        pyver = str(subprocess.check_output("python --version", shell=True).rstrip().decode("utf-8"))
+    except:
+        pyver=""
 
     if (amd64_or_32==0):
         python_win = "win64"
@@ -1190,9 +1204,9 @@ if (os.name == 'nt'):
         python_win = "win32"
         python_win1 = "i686"
 
-    if (pyver is None) or (pyver == ""):
+    if (pyver == ""):
         text.insert(INSERT, " ! No Python3 is installed!\n ! Please install Python first", END, "")
-        Dpy = Button(main, text = "Install Python", command = lambda: pythonofficial(windows_release,windows_machine))
+        Dpy = Button(main, text = "Install Python", command = lambda: pythonofficial(windows_release,windows_machine,0))
         Dpy.pack(side=BOTTOM)
         text.pack()
         time.sleep(0)
@@ -1238,7 +1252,10 @@ else:
             showcodemain_read=str(f"")
             showcodeapp=str(f"")
         del checknotepad
-    pyver = str(subprocess.check_output("python3 --version", shell=True).rstrip().decode("utf-8"))
+    try:
+        pyver = str(subprocess.check_output("python3 --version", shell=True).rstrip().decode("utf-8"))
+    except:
+        pyver=""
 
     if (amd64_or_32==0):
         python_win = "win64"
@@ -1247,9 +1264,9 @@ else:
         python_win = "win32"
         python_win1 = "i686"
 
-    if (pyver is None):
+    if (pyver==""):
         text.insert(INSERT, " ! No Python3 is installed!\n ! Please install Python first", END, "")
-        Dpy = Button(main, text = "Install Python", command = lambda: pythonofficial(windows_release,windows_machine))
+        Dpy = Button(main, text = "Install Python", command = lambda: pythonofficial(windows_release,windows_machine,1))
         Dpy.pack(side=BOTTOM)
         text.pack()
         time.sleep(0)

@@ -62,7 +62,7 @@ else:
     #################
     mainpyexe_name = 'khanh.ico'
     mainpyexe = Path(f"{mainpyexe_name}")
-    WINDOWS_DIRECTORY = '/usr/bin'
+    WINDOWS_DIRECTORY = '/bin'
     cmd_exe0 = str(subprocess.check_output("which bash 2> /dev/null", shell=True).rstrip().decode("utf-8"))
     cmd_exe = Path(f"{cmd_exe0}")
     english = Path('language/en-US.khanh')

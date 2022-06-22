@@ -30,6 +30,9 @@ try:
     from tkinter import messagebox
 except:
     print('Error when try import library')
+    if (os.name != 'nt'):
+        print('try to install [sudo apt-get install python3-tk]')
+    exit()
 
 # Nhóm (class)
 ####UNDERLINE
@@ -67,12 +70,25 @@ else:
     settings_showcode = Path('./settings/showcode.ini')
     all_term=["qterminal","gnome-terminal","lxterminal","xfce4-terminal","terminator","xterm","konsole","rxvt"]
     for term in all_term:
-        checkterm = str(subprocess.check_output(f"{term} --version 2> /dev/null", shell=True).rstrip().decode("utf-8"))
-        if (checkterm == str(f"{term} not found")):
+        if (term == "xterm"):
+            try:
+                checkterm = str(subprocess.check_output(f"{term} -help 2> /dev/null", shell=True).rstrip().decode("utf-8"))
+            except:
+                checkterm = ""
+        else:
+            try:
+                checkterm = str(subprocess.check_output(f"{term} --version 2> /dev/null", shell=True).rstrip().decode("utf-8"))
+            except:
+                checkterm = ""
+        if (checkterm == ""):
+            terminal = ""
             continue
         else:
             terminal=str(f"{term}")
             break
+    if (terminal == ""):
+        print("cannot detect terminal")
+        exit()
 
 # Hàm dành cho hệ thống
 def clear():

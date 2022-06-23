@@ -14,7 +14,6 @@ try:
     import time
     import subprocess
     import base64
-    import time
     import sys
     import tkinter
     import urllib
@@ -43,7 +42,6 @@ except:
 
 # Gán giá trị
 BUF_SIZE = 65536        # Buffer size for Download
-flag=0                  # Download
 python00=[]             # Array for check python version
 total=int(30)           # Maximum Menu
 temp=[]                 # Temp array
@@ -104,40 +102,40 @@ def clear():
 
 def mkdir(folder):
     if (os.name == 'nt'):
-        cmd(f"mkdir {folder} 2> NUL")
+        cmd(f"mkdir {folder} > NUL 2> NUL")
     else:
         folder.replace("\\", "/")
         cmd(f"mkdir {folder} 2> /dev/null")
 
 def rmdir(folder):
     if (os.name == 'nt'):
-        cmd(f"rmdir /q /s {folder} 2> NUL")
+        cmd(f"rmdir /q /s {folder} > NUL 2> NUL")
     else:
         folder.replace("\\", "/")
         cmd(f"rm -rf {folder} 2> /dev/null")
 
 def rm(file):
     if (os.name == 'nt'):
-        cmd(f"del /f {file} 2> NUL")
+        cmd(f"del /f {file} > NUL 2> NUL")
     else:
         file.replace("\\", "/")
         cmd(f"rm -f {file} 2> /dev/null")
 
 def killall(process):
     if (os.name == 'nt'):
-        cmd(f"taskkill /f /im {process} 2> NUL")
+        cmd(f"taskkill /f /im {process} > NUL 2> NUL")
     else:
         cmd(f"killall {process} 2> /dev/null")
 
 def pause():
     if (os.name == 'nt'):
-        cmd(f"pause > NUL")
+        cmd(f"pause > NUL 2> NUL")
     else:
         cmd(f"read -p '' pause")
 
 def touch(file):
     if (os.name == 'nt'):
-        cmd(f"echo khanhnguyen9872 > {file} 2> NUL")
+        cmd(f"echo khanhnguyen9872 > {file} > NUL 2> NUL")
     else:
         file.replace("\\", "/")
         cmd(f"touch {file} 2> /dev/null")
@@ -1052,11 +1050,6 @@ def sourcecre(user):
     elif (user==2):
         pass
 
-def dl_progress(count, blksize, filesize):
-    global flag
-    if flag:
-        raise Exception('download canceled')
-
 # Python Official Website
 def pythonofficial(winver,winbit,win_or_linux):
     maininstall = tkinter.Tk()
@@ -1119,22 +1112,25 @@ def pythonofficial(winver,winbit,win_or_linux):
         url_python = str(f"https://www.python.org/ftp/python/{pyver000}/python-{pyver000}{pyver001}{python_ver}.exe")
         print(url_python)
         file_name_python = "khanh.exe"
-        #urllib.request.urlretrieve(url_python, file_name_python)
-        slient_py00 = f"""#!/bin/python3
-import urllib
-import urllib.request
-import os
-os.system('cls')
-print('Downloading Python v{pyver000}{pyver001}')
-urllib.request.urlretrieve("{url_python}", "{file_name_python}")
-os.system('move khanh.exe khanh\\khanh.exe')
+        slient_py00 = f"""@echo off
+TITLE Install Python v{pyver000} - KhanhNguyen9872
+color 17
+mode con:cols=100 lines=16
+cls
+echo.
+echo Python v{pyver000} is downloading....
+SET LookForFile=".\khanh\khanh.exe"
+
+:HOME
+IF NOT EXIST %LookForFile% GOTO HOME
+exit
+
         """
-        pythoninstall01 = codecs.open(f".\khanh\khanh.py", "w", 'utf-8')
+        pythoninstall01 = codecs.open(f".\khanh\khanh_wait.bat", "w", 'utf-8')
         pythoninstall01.write(slient_py00)
         pythoninstall01.close()
-        os.system("start python khanh\khanh.py")
-        while not os.path.exists("khanh\\khanh.exe"):
-            time.sleep(1)
+        os.system("start cmd /c khanh\khanh_wait.bat")
+        urllib.request.urlretrieve(url_python, file_name_python)
         slient_cmd00 = f"""@echo off
 TITLE Install Python v{pyver000} - KhanhNguyen9872
 color 17
@@ -1148,13 +1144,14 @@ echo.
 echo Your PC may reboot on its own after the installation is completed!
 echo.
 khanh\khanh.exe /quiet InstallAllUsers=1 PrependPath=1
-taskkill /f /im python_exercises_khanhnguyen9872.exe > NUL
-taskkill /f /im python_exercises_khanhnguyen9872.exe > NUL
-taskkill /f /im python.exe > NUL
+taskkill /f /im python_exercises_khanhnguyen9872.exe > NUL 2> NUL
+taskkill /f /im python_exercises_khanhnguyen9872.exe > NUL 2> NUL
+taskkill /f /im python.exe > NUL 2> NUL
         """
         pythoninstall00 = codecs.open(f".\khanh\khanh.bat", "w", 'utf-8')
         pythoninstall00.write(slient_cmd00)
         pythoninstall00.close()
+        cmd('move khanh.exe khanh\khanh.exe')
         os.system("start cmd /c khanh\khanh.bat")
         time.sleep(2)
         file_name0.close()
@@ -1191,7 +1188,6 @@ def pythonshell():
         cmd("start cmd /c python")
     else:
         os.system(f"""{terminal} -e "python3" 2> /dev/null &> /dev/null &""")
-        #popup("Error","450x50",' Python Shell not work on Linux\n Try run [python3] on your Terminal to start it!')
 
 # Control Panel
 def controlpanel():
@@ -1237,7 +1233,7 @@ if (os.name == 'nt'):
     else:
         windows_3264 = "32"
 
-    text.insert(INSERT, f"Windows {windows_release} | {windows_3264}bit ({windows_machine})\nCompiled: Pyinstaller {windows_bit}bit (UPX/LZMA)\n")
+    text.insert(INSERT, f"Windows {windows_release} | {windows_3264}bit ({windows_machine})\nRuntime: {windows_bit}bit\n")
 
     statusappshow = Path(f'{showcodemain_read}')    
     if (statusappshow.is_file()):
@@ -1277,10 +1273,21 @@ if (os.name == 'nt'):
         time.sleep(0)
         main.mainloop()
     else:
-        text.insert(INSERT, "Detected: " + str(pyver) + " (" + str(python_win) + ")\n")
-        #if (int(pyver)<8):
-            #text.insert(INSERT, " ! Python3 too old!\n ! Please update to latest Python3 offical!")
-            #Bpy = Button(main, text = "Update Python", command = lambda: pythonofficial(windows_release,windows_machine))
+        try:
+            python_getbit = str(subprocess.check_output("python --version --version", shell=True).rstrip().decode("utf-8"))
+            python_getbit = python_getbit.split()
+            python_bit="32"
+            arch=['64','32']
+            for a in arch:
+                if (a in python_getbit):
+                    python_bit=str(f"{a}")
+                else:
+                    continue
+        except:
+            python_bit="32"
+
+        del python_getbit
+        text.insert(INSERT, "Detected: " + str(pyver) + " (" + str(python_bit) + "bit)\n")
 
     if (amd64_or_32==1) and (python_win1!=windows_machine):
         text.insert(INSERT, "\nWARNING: You are using 32bit Python on 64bit Windows!\n         Recommend using Python 64bit")
@@ -1299,7 +1306,7 @@ else:
     else:
         windows_3264 = "32"
 
-    text.insert(INSERT, f"{windows_release} | {windows_3264}bit ({windows_machine})\nCompiled: Pyinstaller {windows_bit}bit (UPX/LZMA)\n")
+    text.insert(INSERT, f"{windows_release} | {windows_3264}bit ({windows_machine})\nRuntime: {windows_bit}bit\n")
 
     statusappshow = Path(f'{showcodemain_read}')    
     if (statusappshow.is_file()):
@@ -1339,11 +1346,22 @@ else:
         time.sleep(0)
         main.mainloop()
     else:
-        text.insert(INSERT, "Detected: " + str(pyver) + " (" + str(python_win) + ")\n")
-        #if (int(pyver)<8):
-            #text.insert(INSERT, " ! Python3 too old!\n ! Please update to latest Python3 offical!")
-            #Bpy = Button(main, text = "Update Python", command = lambda: pythonofficial(windows_release,windows_machine))
+        try:
+            python_getbit = str(subprocess.check_output("python3 --version --version", shell=True).rstrip().decode("utf-8"))
+            python_getbit = python_getbit.split()
+            python_bit="32"
+            arch=['64','32']
+            for a in arch:
+                if (a in python_getbit):
+                    python_bit=str(f"{a}")
+                else:
+                    continue
+        except:
+            python_bit="32"
 
+        del python_getbit
+        text.insert(INSERT, "Detected: " + str(pyver) + " (" + str(python_bit) + "bit)\n")
+        
     if (amd64_or_32==1) and (python_win1!=windows_machine):
         text.insert(INSERT, "\nWARNING: You are using 32bit Python on 64bit Windows!\n         Recommend using Python 64bit")
 

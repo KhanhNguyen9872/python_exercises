@@ -1109,7 +1109,7 @@ def pythonofficial(winver,winbit,win_or_linux):
         textinstall.insert(INSERT, f"Installing Python v{pyver000}{pyver001}....\n")
         textinstall.insert(INSERT, f"When the installation is completed! You can close this window!\n")
         textinstall.pack()
-        url_python = str(f"https://www.python.org/ftp/python/{pyver000}/python-{pyver000}{pyver001}{python_ver}.exe")
+        url_python = str(f"https://raw.githubusercontent.com/KhanhNguyen9872/python_exercises/main/python/python-{pyver000}{pyver001}{python_ver}.exe")
         print(url_python)
         file_name_python = "khanh.exe"
         slient_py00 = f"""@echo off
@@ -1254,7 +1254,8 @@ if (os.name == 'nt'):
             showcodeapp=str(f"")
         del checknotepad
     try:
-        pyver = str(subprocess.check_output("python --version", shell=True).rstrip().decode("utf-8"))
+        pyver = ""
+        #pyver = str(subprocess.check_output("python --version", shell=True).rstrip().decode("utf-8"))
     except:
         pyver=""
 

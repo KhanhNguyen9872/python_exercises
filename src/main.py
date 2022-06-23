@@ -54,6 +54,7 @@ if (os.name == 'nt'):
     english = Path('language\en-US.khanh')
     vietnamese = Path('language\vi-VN.khanh')
     settings_showcode = Path('settings\showcode.ini')
+    settings_background = Path('settings\setting_background.ini')
     mainpyexe_name = 'python_exercises_khanhnguyen9872.exe'
     mainpyexe = Path(f"{mainpyexe_name}")
     khanhlocal = os.getenv('LOCALAPPDATA')
@@ -70,7 +71,8 @@ else:
     cmd_exe = Path(f"{cmd_exe0}")
     english = Path('language/en-US.khanh')
     vietnamese = Path('language/vi-VN.khanh')
-    settings_showcode = Path('./settings/showcode.ini')
+    settings_showcode = Path('settings/showcode.ini')
+    settings_background = Path('settings/setting_background.ini')
     all_term=["qterminal","gnome-terminal","lxterminal","xfce4-terminal","terminator","xterm","konsole","rxvt"]
     for term in all_term:
         if (term == "xterm"):
@@ -102,23 +104,23 @@ def clear():
 
 def mkdir(folder):
     if (os.name == 'nt'):
+        folder = folder.replace("/", "\\")
         cmd(f"mkdir {folder} > NUL 2> NUL")
     else:
-        folder.replace("\\", "/")
         cmd(f"mkdir {folder} 2> /dev/null")
 
 def rmdir(folder):
     if (os.name == 'nt'):
+        folder = folder.replace("/", "\\")
         cmd(f"rmdir /q /s {folder} > NUL 2> NUL")
     else:
-        folder.replace("\\", "/")
         cmd(f"rm -rf {folder} 2> /dev/null")
 
 def rm(file):
     if (os.name == 'nt'):
+        file = file.replace("/", "\\")
         cmd(f"del /f {file} > NUL 2> NUL")
     else:
-        file.replace("\\", "/")
         cmd(f"rm -f {file} 2> /dev/null")
 
 def killall(process):
@@ -135,9 +137,9 @@ def pause():
 
 def touch(file):
     if (os.name == 'nt'):
+        file = file.replace("/", "\\")
         cmd(f"echo khanhnguyen9872 > {file} > NUL 2> NUL")
     else:
-        file.replace("\\", "/")
         cmd(f"touch {file} 2> /dev/null")
 
 def cmd(args):
@@ -268,6 +270,43 @@ exit 0
         exec(f"""{main_name}_bat.write(temp)""")
         os.system(f"""{terminal} -e 'bash ./khanh/{pycode}.sh' 2> /dev/null &> /dev/null &""")
 
+def find(khanhnguyen9872):
+    text.tag_remove('found', '1.0', END)
+    s = str(E1.get())
+    if s:
+        idx = '1.0'
+        while 1:
+            idx = text.search(s, idx, nocase=1,
+                            stopindex=END)
+            if not idx: break
+            lastidx = '%s+%dc' % (idx, len(s))
+            text.tag_add('found', idx, lastidx)
+            idx = lastidx
+    text.tag_config('found', foreground='red')
+    E1.focus_set()
+
+def change_background(khanh):
+    mkdir('settings')
+    rm('settings/setting_background.ini')
+    global temp_set_back
+    global temp_set_back_name
+    if (temp_set_back=="0"):
+        temp_set_back="1"
+        temp_set_back_name=str("Black")
+    elif (temp_set_back=="1"):
+        temp_set_back="0"
+        temp_set_back_name=str("White")
+    else:
+        temp_set_back="0"
+        temp_set_back_name=str("White")
+    if (os.name == 'nt'):
+        temp_set_b = codecs.open("settings\setting_background.ini", "w", 'utf-8')
+    else:
+        temp_set_b = codecs.open("settings/setting_background.ini", "w", 'utf-8')
+    temp_set_b.write(f"{temp_set_back}")
+    temp_set_b.close()
+    close_popup()
+
 # Check
 if (cmd_exe.is_file()):
     del cmd_exe
@@ -291,6 +330,7 @@ else:
     Label(mainicon, text=f"Missing required file!\nFile: {mainpyexe_name}", font=('BOLD')).grid(row=0, sticky=W)
     CONFIRM1 = Button(mainicon, text="  Close program  ", command=close_process).grid(row=1, column=0, sticky=W)
     mainicon.mainloop()
+    exit()
 
 if (checkicon.is_file()):
     khanhicon_orig = "b1e53fda77164aea77abbde0813834734173b05119d0559077501eb73115a9ee"
@@ -340,7 +380,7 @@ if (settings_showcode.is_file()):
             temp_decode = binary_array.decode()
         except:
             file_name00.close()
-            rm('settings\\showcode.ini')
+            rm('settings/showcode.ini')
             mainshowcodeini = tkinter.Tk()
             mainshowcodeini.title(f'Settings ERROR | Python (KhanhNguyen9872)')
             if (os.name == 'nt'):
@@ -406,7 +446,7 @@ else:
             showcodemain_read=str(string_decode)
         except:
             file_name00.close()
-            rm('settings\\showcode.ini')
+            rm('settings/showcode.ini')
             mainshowcodeini = tkinter.Tk()
             mainshowcodeini.title(f'Settings ERROR | Python (KhanhNguyen9872)')
             if (os.name == 'nt'):
@@ -428,6 +468,34 @@ else:
     del string_encode
     del string_decode
     del showcode_app_select
+
+def default_background():
+    rm('settings/setting_background.ini')
+    global temp_set_back
+    global temp_set_back_name
+    temp_set_back="0"
+    temp_set_back_name="White"
+    if (os.name == 'nt'):
+        temp_set_b = codecs.open("settings\setting_background.ini", "w", 'utf-8')
+        temp_set_b.write(temp_set_back)
+    else:
+        temp_set_b = codecs.open(f"settings/setting_background.ini", "w", 'utf-8')
+        temp_set_b.write(temp_set_back)
+    temp_set_b.close()
+
+if (settings_background.is_file()):
+    with open(f"{settings_background}",'r',encoding='utf-8') as file_set_back:
+        temp_set_back = str(file_set_back.read().rstrip())
+    if (temp_set_back == ""):
+        default_background()
+    elif (temp_set_back == "0"):
+        temp_set_back_name="White"
+    elif (temp_set_back == "1"):
+        temp_set_back_name="Black"
+    else:
+        temp_set_back_name="White"
+else:
+    default_background()
 
 if (os.name == 'nt'):
     name_showcode_app = str(showcode_app[-1] + showcode_app [-2] + showcode_app [-3] + showcode_app [-4])
@@ -470,7 +538,7 @@ if (os.name == 'nt'):
                 showcodemain_read=str(string_decode)
             except:
                 file_name00.close()
-                rm('settings\\showcode.ini')
+                rm('settings/showcode.ini')
                 mainshowcodeini = tkinter.Tk()
                 mainshowcodeini.title(f'Settings ERROR | Python (KhanhNguyen9872)')
                 if (os.name == 'nt'):
@@ -497,7 +565,7 @@ if (os.name == 'nt'):
 
 if (vietnamese.is_file()) and (english.is_file()):
     rmdir('language'); mkdir('language') 
-    touch('language\\vi-VN.khanh')
+    touch('language/vi-VN.khanh')
     language=str("Vietnamese")
     del vietnamese
     del english
@@ -510,7 +578,7 @@ elif (vietnamese.is_file()) or (english.is_file()):
     del english
 else:
     rmdir('language'); mkdir('language') 
-    touch('language\\vi-VN.khanh')
+    touch('language/vi-VN.khanh')
     language=str("Vietnamese")
     del vietnamese
     del english
@@ -1198,19 +1266,19 @@ def controlpanel():
 
 # Change language
 def change_language(language):
+    mkdir('language')
     if (language=="Vietnamese"):
-        rm('language\\vi-VN.khanh')
-        touch('language\\en-US.khanh')
-        close_popup()
+        rm('language/vi-VN.khanh')
+        touch('language/en-US.khanh')
         language=str("English")
         return language
 
     elif (language=="English"):
-        rm('language\\en-US.khanh')
-        touch('language\\vi-VN.khanh')
-        close_popup()
+        rm('language/en-US.khanh')
+        touch('language/vi-VN.khanh')
         language=str("Vietnamese")
         return language
+    close_popup()
 
 ## Check python version
 text = Text(main)
@@ -1447,7 +1515,7 @@ def menucheck(khanhnguyen9872):
                     showcodemain_read=str(string_decode)
                 except:
                     file_name00.close()
-                    rm('settings\\showcode.ini')
+                    rm('settings/showcode.ini')
                     mainshowcodeini = tkinter.Tk()
                     mainshowcodeini.title(f'Settings ERROR | Python (KhanhNguyen9872)')
                     if (os.name == 'nt'):
@@ -1510,7 +1578,7 @@ def menucheck(khanhnguyen9872):
                     showcodemain_read=str(string_decode)
                 except:
                     file_name00.close()
-                    rm('settings\\showcode.ini')
+                    rm('settings/showcode.ini')
                     mainshowcodeini = tkinter.Tk()
                     mainshowcodeini.title(f'Settings ERROR | Python (KhanhNguyen9872)')
                     if (os.name == 'nt'):
@@ -1574,7 +1642,7 @@ def menucheck(khanhnguyen9872):
                         showcodemain_read=str(string_decode)
                     except:
                         file_name00.close()
-                        rm('settings\\showcode.ini')
+                        rm('settings/showcode.ini')
                         mainshowcodeini = tkinter.Tk()
                         mainshowcodeini.title(f'Settings ERROR | Python (KhanhNguyen9872)')
                         mainshowcodeini.iconbitmap('khanh.ico')
@@ -1597,10 +1665,12 @@ def menucheck(khanhnguyen9872):
         main001.geometry("420x200")
         main001.resizable(False, False)
         Label(main001, text="Settings", font=('BOLD')).grid(row=0, sticky=W)
-        Label(main001, text=f"Language (Current: {language})").grid(row=1, column=0, sticky=W)
-        CONFIRM = Button(main001, text="  Change  ", command=lambda: change_language(str(language))).grid(row=1, column=1, sticky=W)
-        Label(main001, text=f"Show Code as Application ({showcode_app}) ").grid(row=2, column=0, sticky=W)
-        CONFIRM1 = Button(main001, text="  Change  ", command=change_showcode).grid(row=2, column=1, sticky=W)
+        Label(main001, text=f"Background (Current: {temp_set_back_name}) ").grid(row=1, column=0, sticky=W)
+        CONFIRM2 = Button(main001, text="  Change  ", command=lambda: change_background(str(temp_set_back))).grid(row=1, column=1, sticky=W)
+        Label(main001, text=f"Language (Current: {language})").grid(row=2, column=0, sticky=W)
+        CONFIRM = Button(main001, text="  Change  ", command=lambda: change_language(str(language))).grid(row=2, column=1, sticky=W)
+        Label(main001, text=f"Show Code as Application ({showcode_app}) ").grid(row=3, column=0, sticky=W)
+        CONFIRM1 = Button(main001, text="  Change  ", command=change_showcode).grid(row=3, column=1, sticky=W)
         main001.mainloop()
     elif (menunum==0):
         main0 = tkinter.Tk()
@@ -1652,12 +1722,17 @@ def menucheck(khanhnguyen9872):
 
 ### MAIN
 main1 = tkinter.Tk()
+if (temp_set_back == "1"):
+    main1.configure(background='black')
 main1.title(f'Menu | {pyver} (KhanhNguyen9872)')
 if (os.name == 'nt'):
     main1.iconbitmap('khanh.ico')
 main1.geometry("600x420")
 main1.resizable(False, False)
-text = Text(main1)
+if (temp_set_back == '1'):
+    text = Text(main1, width = 90, height=17, font=("Helvetica", 14), background="black", foreground="white")
+else:
+    text = Text(main1, width = 90, height=17, font=("Helvetica", 14))
 text.insert(INSERT, "\nMenu các chương trình của tôi\nBy KhanhNguyen9872\n\nVui lòng chọn: \n-1. Settings\n0. KhanhNguyen9872\n1. Giải phương trình bậc 2\n2. Tìm ra số lớn nhất, bé nhất\n3. Sắp xếp từ bé đến lớn và ngược lại\n4. Đếm số lần xuất hiện của 1 chuỗi\n5. Mã hóa 1 chuỗi string\n6. Chuyển tiền USD -> VND, VND -> USD\n7. Tìm số giai thừa\n8. Tìm ƯCLN và BCNN\n9. Kiểm tra số nguyên tố\n10. Tạo hình tam giác trong Terminal\n11. Tạo pháo hoa bằng Turtle\n12. Tìm ra chữ có 3 kí tự trở lên trong String\n13. Tính tổng các ước số của N (ngoại trừ N)\n14. Tính lũy thừa a^b bằng hàm pow()\n15. Kiểm tra là tam giác vuông, đều, cân, tù hay nhọn")
 text.insert(INSERT, "\n16. Tìm ra các số chẵn, lẻ (Có lượt bỏ kí tự không phải số)\n17. Đếm số các kí tự In hoa và In thường (Không bao gồm số)\n18. \n19. \n20. ")
 text.insert(INSERT, "\n21. \n22. \n23. \n24. \n25. ")
@@ -1669,19 +1744,38 @@ text.config(state=DISABLED)
 #text.bind('<BackSpace>', lambda _:'break')
 #text.bind('<Return>', lambda _:'break')
 
+if (temp_set_back == "1"):
+    L1 = Label(main1, text="Choose:", background='black', fg='white')
+    L1.pack(side = LEFT)
+    L2 = Label(main1, text="https://fb.me/khanh10a1", background='black', fg='white')
+    L2.pack(side = RIGHT)
+    E1 = Entry(main1, bd=7, background='#787878', fg='white')
+    E1.pack(side = LEFT)
 
-L1 = Label(main1, text="Choose:")
-L1.pack(side = LEFT)
-L2 = Label(main1, text="https://fb.me/khanh10a1")
-L2.pack(side = RIGHT)
-E1 = Entry(main1, bd=5)
-E1.pack(side = LEFT)
+    E1.bind('<Return>', menucheck)
+    E1.bind('<Tab>', find)
+    B = Button(main1, text = "OK", command = lambda: menucheck(''), background='#66453E', fg='white')
+    B.pack(side=LEFT)
+    F = Button(main1, text = "Find", command = lambda: find(''), background='#66453E', fg='white')
+    F.pack(side=LEFT)
+    BB = Button(main1, text = "Python Shell", command = pythonshell, background='#952108', fg='white')
+    BB.pack(side=RIGHT)
+else:
+    L1 = Label(main1, text="Choose:")
+    L1.pack(side = LEFT)
+    L2 = Label(main1, text="https://fb.me/khanh10a1")
+    L2.pack(side = RIGHT)
+    E1 = Entry(main1, bd=7)
+    E1.pack(side = LEFT)
 
-E1.bind('<Return>', menucheck)
-B = Button(main1, text = "OK", command = lambda: menucheck(''))
-B.pack(side=LEFT)
-BB = Button(main1, text = "Python Shell", command = pythonshell)
-BB.pack(side=BOTTOM)
+    E1.bind('<Return>', menucheck)
+    E1.bind('<Tab>', find)
+    B = Button(main1, text = "OK", command = lambda: menucheck(''))
+    B.pack(side=LEFT)
+    F = Button(main1, text = "Find", command = lambda: find(''))
+    F.pack(side=LEFT)
+    BB = Button(main1, text = "Python Shell", command = pythonshell)
+    BB.pack(side=RIGHT)
 
 main1.mainloop()
 

@@ -1254,8 +1254,7 @@ if (os.name == 'nt'):
             showcodeapp=str(f"")
         del checknotepad
     try:
-        pyver = ""
-        #pyver = str(subprocess.check_output("python --version", shell=True).rstrip().decode("utf-8"))
+        pyver = str(subprocess.check_output("python --version", shell=True).rstrip().decode("utf-8"))
     except:
         pyver=""
 

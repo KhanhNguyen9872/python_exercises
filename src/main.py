@@ -10,6 +10,8 @@ if (__name__ != '__main__'):
 try:
     import math
     import os
+    import threading
+    import time
     import subprocess
     import base64
     import time
@@ -25,6 +27,8 @@ try:
     from random import *
     from tkinter import *
     from tkinter import filedialog
+    from urllib.request import urlretrieve
+    from threading import Thread
     from pathlib import Path
     from os.path import exists
     from tkinter import messagebox
@@ -39,6 +43,7 @@ except:
 
 # Gán giá trị
 BUF_SIZE = 65536        # Buffer size for Download
+flag=0                  # Download
 python00=[]             # Array for check python version
 total=int(30)           # Maximum Menu
 temp=[]                 # Temp array
@@ -142,6 +147,7 @@ def cmd(args):
 
 def close_process():
     killall('python_exercises_khanhnguyen9872.exe')
+    killall('python.exe')
     rmdir('khanh')
     exit()
 
@@ -1046,6 +1052,11 @@ def sourcecre(user):
     elif (user==2):
         pass
 
+def dl_progress(count, blksize, filesize):
+    global flag
+    if flag:
+        raise Exception('download canceled')
+
 # Python Official Website
 def pythonofficial(winver,winbit,win_or_linux):
     maininstall = tkinter.Tk()
@@ -1059,6 +1070,9 @@ def pythonofficial(winver,winbit,win_or_linux):
         if (winbit=="AMD64"):
             python_ver="-amd64"
             winbit="64"
+        elif (winbit=="ARM64"):
+            python_ver="-arm64"
+            winbit="64"
         else:
             python_ver=""
             winbit="32"
@@ -1067,27 +1081,60 @@ def pythonofficial(winver,winbit,win_or_linux):
             url = "https://raw.githubusercontent.com/KhanhNguyen9872/python_exercises/main/python_version_win7.txt"
             urllib.request.urlretrieve(url, file_name)
             with open(f"{file_name}",'r',encoding='utf-8') as file_name0:
-                pyver000=str(file_name0.read())
+                pyver000=str(file_name0.read().rstrip())
+            pyver001=""
             textinstall.insert(INSERT, f"Found: Windows {winver} ({winbit}bit)\n\n")
             textinstall.insert(INSERT, f"Getting version....\n")
             textinstall.insert(INSERT, f"Found: {pyver000}\n")
         else:
-            file_name = "python_version.txt"
-            url = "https://raw.githubusercontent.com/KhanhNguyen9872/python_exercises/main/python_version.txt"
-            urllib.request.urlretrieve(url, file_name)
-            with open(f"{file_name}",'r',encoding='utf-8') as file_name0:
-                pyver000=str(file_name0.read())
-            textinstall.insert(INSERT, f"Found: Windows {winver} {winbit}bit\n\n")
-            textinstall.insert(INSERT, f"Getting version....\n")
-            textinstall.insert(INSERT, f"Found: {pyver000}\n")
+            if (python_ver=="-arm64"):
+                file_name = "python_version.txt"
+                file_name2 = "python_version_beta.txt"
+                url = "https://raw.githubusercontent.com/KhanhNguyen9872/python_exercises/main/python_version_arm64.txt"
+                url2 = "https://raw.githubusercontent.com/KhanhNguyen9872/python_exercises/main/python_version_arm64_beta.txt"
+                urllib.request.urlretrieve(url, file_name)
+                urllib.request.urlretrieve(url2, file_name2)
+                with open(f"{file_name}",'r',encoding='utf-8') as file_name0:
+                    pyver000=str(file_name0.read().rstrip())
+                with open(f"{file_name2}",'r',encoding='utf-8') as file_name00:
+                    pyver001=str(file_name00.read().rstrip())
+                textinstall.insert(INSERT, f"Found: Windows {winver} {winbit}bit\n\n")
+                textinstall.insert(INSERT, f"Getting version....\n")
+                textinstall.insert(INSERT, f"Found: {pyver000}\n")
+            else:
+                file_name = "python_version.txt"
+                url = "https://raw.githubusercontent.com/KhanhNguyen9872/python_exercises/main/python_version.txt"
+                urllib.request.urlretrieve(url, file_name)
+                with open(f"{file_name}",'r',encoding='utf-8') as file_name0:
+                    pyver000=str(file_name0.read().rstrip())
+                pyver001=""
+                textinstall.insert(INSERT, f"Found: Windows {winver} {winbit}bit\n\n")
+                textinstall.insert(INSERT, f"Getting version....\n")
+                textinstall.insert(INSERT, f"Found: {pyver000}{pyver001}\n")
             
-        textinstall.insert(INSERT, f"\nDownloading Python v{pyver000}....\n")
-        textinstall.insert(INSERT, f"Installing Python v{pyver000}....\n")
+        textinstall.insert(INSERT, f"\nDownloading Python v{pyver000}{pyver001}....\n")
+        textinstall.insert(INSERT, f"Installing Python v{pyver000}{pyver001}....\n")
         textinstall.insert(INSERT, f"When the installation is completed! You can close this window!\n")
         textinstall.pack()
-        url_python = str(f"https://www.python.org/ftp/python/{pyver000}/python-{pyver000}{python_ver}.exe")
+        url_python = str(f"https://www.python.org/ftp/python/{pyver000}/python-{pyver000}{pyver001}{python_ver}.exe")
+        print(url_python)
         file_name_python = "khanh.exe"
-        urllib.request.urlretrieve(url_python, file_name_python)
+        #urllib.request.urlretrieve(url_python, file_name_python)
+        slient_py00 = f"""#!/bin/python3
+import urllib
+import urllib.request
+import os
+os.system('cls')
+print('Downloading Python v{pyver000}{pyver001}')
+urllib.request.urlretrieve("{url_python}", "{file_name_python}")
+os.system('move khanh.exe khanh\\khanh.exe')
+        """
+        pythoninstall01 = codecs.open(f".\khanh\khanh.py", "w", 'utf-8')
+        pythoninstall01.write(slient_py00)
+        pythoninstall01.close()
+        os.system("start python khanh\khanh.py")
+        while not os.path.exists("khanh\\khanh.exe"):
+            time.sleep(1)
         slient_cmd00 = f"""@echo off
 TITLE Install Python v{pyver000} - KhanhNguyen9872
 color 17
@@ -1103,12 +1150,12 @@ echo.
 khanh\khanh.exe /quiet InstallAllUsers=1 PrependPath=1
 taskkill /f /im python_exercises_khanhnguyen9872.exe > NUL
 taskkill /f /im python_exercises_khanhnguyen9872.exe > NUL
+taskkill /f /im python.exe > NUL
         """
-        cmd('move khanh.exe khanh\khanh.exe')
         pythoninstall00 = codecs.open(f".\khanh\khanh.bat", "w", 'utf-8')
         pythoninstall00.write(slient_cmd00)
         pythoninstall00.close()
-        cmd("start cmd /c khanh\khanh.bat")
+        os.system("start cmd /c khanh\khanh.bat")
         time.sleep(2)
         file_name0.close()
         rm(f'{file_name}')
@@ -1185,6 +1232,8 @@ if (os.name == 'nt'):
     windows_machine = str(platform.machine())
     if (windows_machine=="AMD64"):
         windows_3264 = "64"
+    elif (windows_machine=="ARM64"):
+        windows_3264 = "64"
     else:
         windows_3264 = "32"
 
@@ -1244,6 +1293,8 @@ else:
     windows_release = str(platform.release())
     windows_machine = str(platform.machine())
     if (windows_machine=="x86_64"):
+        windows_3264 = "64"
+    if (windows_machine=="aarch64"):
         windows_3264 = "64"
     else:
         windows_3264 = "32"

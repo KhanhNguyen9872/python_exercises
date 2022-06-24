@@ -152,70 +152,92 @@ def close_process():
     exit()
 
 def popup(main,geometry,error):
+    global set_bg
+    global set_fg
+    global set_button_bg
+    global set_button_fg
+    global set_entry_bg
     mainerror = tkinter.Tk()
     mainerror.title(f"{main} | {pyver} (KhanhNguyen9872)")
     if (os.name == 'nt'):
         mainerror.iconbitmap('khanh.ico')
+    mainerror.configure(background=f'{set_bg}')
     mainerror.geometry(f"{geometry}")
     mainerror.resizable(False, False)
-    texterror = Text(mainerror)
+    texterror = Text(mainerror, background=f'{set_bg}', foreground=f'{set_fg}',font=("Arial", 14, 'bold'))
     texterror.insert(INSERT, f"{error}")
     texterror.pack()
     mainerror.mainloop()
 
 def showcodeisnull():
+    global set_bg
+    global set_fg
+    global set_button_bg
+    global set_button_fg
+    global set_entry_bg
     maincodenull = tkinter.Tk()
     maincodenull.title(f'No ShowCode Application | Python (KhanhNguyen9872)')
     if (os.name == 'nt'):
         maincodenull.iconbitmap('khanh.ico')
+    maincodenull.configure(background=f'{set_bg}')
     maincodenull.geometry("400x60")
     maincodenull.resizable(False, False)
-    Label(maincodenull, text="Show code as Application is not found!", font=('BOLD')).grid(row=0, sticky=W)
-    Label(maincodenull, text="You can go to Settings to change it!", font=('BOLD')).grid(row=1, sticky=W)
+    Label(maincodenull, text="Show code as Application is not found!", background=f'{set_bg}', foreground=f'{set_fg}', font=('BOLD')).grid(row=0, sticky=W)
+    Label(maincodenull, text="You can go to Settings to change it!", background=f'{set_bg}', foreground=f'{set_fg}', font=('BOLD')).grid(row=1, sticky=W)
     maincodenull.mainloop()
 
 def menu_option(menunum,main_name,text_name,name,example,copyright,copyr_number,geometry,total,name2,example2):
+    global set_fg
+    global set_bg
+    global set_button_bg
+    global set_button_fg
+    global set_entry_bg
     exec(f"""{main_name} = tkinter.Tk()""")
     exec(f"""{main_name}.title(f'Bài {menunum} | {pyver} (KhanhNguyen9872)')""")
     if (os.name == 'nt'):
         exec(f"""{main_name}.iconbitmap('khanh.ico')""")
+    exec(f"""{main_name}.configure(background='{set_bg}')""")
     exec(f"""{main_name}.geometry('{geometry}')""")
     exec(f"""{main_name}.resizable(False, False)""")
-    exec(f"""{text_name} = Text({main_name})""")
-    exec(f"""Label({main_name}, text="{name}", font=('BOLD')).grid(row=0, sticky=W)""")
+    exec(f"""{text_name} = Text({main_name}, background=f'{set_bg}', foreground=f'{set_fg}')""")
+    exec(f"""Label({main_name}, text="{name}", font=('BOLD'), background=f'{set_bg}', foreground=f'{set_fg}').grid(row=0, sticky=W)""")
     if (str(copyright)!="0"):
-        exec(f"""Label({main_name}, text="   --Source: {copyright}--").grid(row=1, sticky=W)""")
+        exec(f"""Label({main_name}, text="   --Source: {copyright}--", background=f'{set_bg}', foreground=f'{set_fg}').grid(row=1, sticky=W)""")
     else:
-        exec(f"""Label({main_name}, text="{example}").grid(row=1, sticky=W)""")
-    exec(f"""SHOW = Button({main_name}, text="Show Code", command=lambda: showcode(int({menunum}),0)).grid(row=2, column=0, sticky=W)""")
-    exec(f"""SHOWAPP = Button({main_name}, text="Show Code as Application", command=lambda: showcode(int({menunum}),1)).grid(row=3, column=0, sticky=W)""")
-    exec(f"""Label({main_name}, text="").grid(row=2, column=1, sticky=W)""")
-    exec(f"""RUN_ON_TERMINAL = Button({main_name}, text="Run as Terminal", command=lambda: showcode(int({menunum}),9)).grid(row=2, column=2, sticky=W)""")
+        exec(f"""Label({main_name}, text="{example}", background=f'{set_bg}', foreground=f'{set_fg}').grid(row=1, sticky=W)""")
+    exec(f"""SHOW = Button({main_name}, text="Show Code", background=f'{set_button_bg}', foreground=f'{set_button_fg}', command=lambda: showcode(int({menunum}),0)).grid(row=2, column=0, sticky=W)""")
+    exec(f"""SHOWAPP = Button({main_name}, text="Show Code as Application", background=f'{set_button_bg}', foreground=f'{set_button_fg}', command=lambda: showcode(int({menunum}),1)).grid(row=3, column=0, sticky=W)""")
+    exec(f"""Label({main_name}, text="", background=f'{set_bg}', foreground=f'{set_fg}').grid(row=2, column=1, sticky=W)""")
+    exec(f"""RUN_ON_TERMINAL = Button({main_name}, text="Run as Terminal", background=f'{set_button_bg}', foreground=f'{set_button_fg}', command=lambda: showcode(int({menunum}),9)).grid(row=2, column=2, sticky=W)""")
     if (str(copyright)!="0"):
-        exec(f"""SOURCEBY = Button({main_name}, text="{copyright}", command=lambda: sourcecre(int({copyr_number}))).grid(row=3, column=2, sticky=W)""")
-    exec(f"""Label({main_name}, text="").grid(row=4, sticky=W)""")
+        exec(f"""SOURCEBY = Button({main_name}, text="{copyright}", background=f'{set_button_bg}', foreground=f'{set_button_fg}', command=lambda: sourcecre(int({copyr_number}))).grid(row=3, column=2, sticky=W)""")
+    exec(f"""Label({main_name}, text="", background=f'{set_bg}', foreground=f'{set_fg}').grid(row=4, sticky=W)""")
     if (int(total)==2):
-        exec(f"""Label({main_name}, text="{name2}", font=('BOLD')).grid(row=5, sticky=W)""")
-        exec(f"""Label({main_name}, text="{example2}").grid(row=6, sticky=W)""")
-        exec(f"""SHOW = Button({main_name}, text="Show Code", command=lambda: showcode(str({menunum}),0)).grid(row=7, column=0, sticky=W)""")
-        exec(f"""SHOWAPP = Button({main_name}, text="Show Code as Application", command=lambda: showcode(str({menunum}),1)).grid(row=8, column=0, sticky=W)""")
-        exec(f"""Label({main_name}, text="").grid(row=7, column=1, sticky=W)""")
-        exec(f"""RUN_ON_TERMINAL = Button({main_name}, text="Run as Terminal", command=lambda: showcode(str({menunum}),9)).grid(row=7, column=2, sticky=W)""")
-        exec(f"""Label({main_name}, text="").grid(row=9, sticky=W)""")
+        exec(f"""Label({main_name}, text="{name2}", background=f'{set_bg}', foreground=f'{set_fg}', font=('BOLD')).grid(row=5, sticky=W)""")
+        exec(f"""Label({main_name}, text="{example2}", background=f'{set_bg}', foreground=f'{set_fg}').grid(row=6, sticky=W)""")
+        exec(f"""SHOW = Button({main_name}, text="Show Code", background=f'{set_button_bg}', foreground=f'{set_button_fg}', command=lambda: showcode(str({menunum}),0)).grid(row=7, column=0, sticky=W)""")
+        exec(f"""SHOWAPP = Button({main_name}, text="Show Code as Application", background=f'{set_button_bg}', foreground=f'{set_button_fg}', command=lambda: showcode(str({menunum}),1)).grid(row=8, column=0, sticky=W)""")
+        exec(f"""Label({main_name}, text="", background=f'{set_bg}', foreground=f'{set_fg}').grid(row=7, column=1, sticky=W)""")
+        exec(f"""RUN_ON_TERMINAL = Button({main_name}, text="Run as Terminal", background=f'{set_button_bg}', foreground=f'{set_button_fg}', command=lambda: showcode(str({menunum}),9)).grid(row=7, column=2, sticky=W)""")
+        exec(f"""Label({main_name}, text="", background=f'{set_bg}', foreground=f'{set_fg}').grid(row=9, sticky=W)""")
 
 def showcode_py(menunumber,main_name,text_name,geometry,pycode):
+    global set_fg
+    global set_bg
+    global set_button_bg
+    global set_button_fg
+    global set_entry_bg
     exec(f"""{main_name} = tkinter.Tk()""")
     exec(f"""{main_name}.title(f'Show code [{menunumber}]    |    Use: "Ctrl + C" to copy (KhanhNguyen9872)')""")
     if (os.name == 'nt'):
         exec(f"""{main_name}.iconbitmap('khanh.ico')""")
+    exec(f"""{main_name}.configure(background='{set_bg}')""")
     exec(f"""{main_name}.geometry("{geometry}")""")
     exec(f"""{main_name}.resizable(False, False)""")
-    exec(f"""{text_name} = Text({main_name})""")
+    exec(f"""{text_name} = Text({main_name}, width = 90, height=17, font=("Arial", 14), background='{set_bg}', foreground='{set_fg}')""")
     exec(f"""{text_name}.insert(INSERT, {pycode})""")
     exec(f"""{text_name}.pack()""")
     exec(f"""{text_name}.config(state=DISABLED)""")
-    #{text_name}.tag_add("start", "1.0", "99.0")
-    #{text_name}.tag_config("start", background = "gray", foreground = "white")
     exec(f"""{main_name}.mainloop()""")
 
 def showcode_withapp(showcodemain_read,main_name,pycode):
@@ -271,19 +293,23 @@ exit 0
         os.system(f"""{terminal} -e 'bash ./khanh/{pycode}.sh' 2> /dev/null &> /dev/null &""")
 
 def find(khanhnguyen9872):
+    global set_find_fg
     text.tag_remove('found', '1.0', END)
-    s = str(E1.get())
-    if s:
-        idx = '1.0'
-        while 1:
-            idx = text.search(s, idx, nocase=1,
+    if (str(E1.get()) == ""):
+        popup("Error","450x40",f"Bạn chưa nhập gì nên không tìm đâu nhé:3")
+    else:
+        s=str(E1.get())
+        if s:
+            idx = '1.0'
+            while 1:
+                idx = text.search(s, idx, nocase=1,
                             stopindex=END)
-            if not idx: break
-            lastidx = '%s+%dc' % (idx, len(s))
-            text.tag_add('found', idx, lastidx)
-            idx = lastidx
-    text.tag_config('found', foreground='red')
-    E1.focus_set()
+                if not idx: break
+                lastidx = '%s+%dc' % (idx, len(s))
+                text.tag_add('found', idx, lastidx)
+                idx = lastidx
+        text.tag_config('found', foreground=f'{set_find_fg}', font=("Arial", 16, 'bold'))
+        E1.focus_set()
 
 def change_background(khanh):
     mkdir('settings')
@@ -1104,7 +1130,7 @@ def showcode(menunumber,app):
         run_terminal(f"{menunumber}",f"{pyver}",f"filecode{menunumber}",f"{fcode}")
     elif (app!=1):
         #showcode_py(menunumber,main_name,text_name,geometry,pycode)
-        showcode_py(f"{menunumber}",f"mainshow{menunumber}",f"text{menunumber}","600x380",f"{fcode}")
+        showcode_py(f"{menunumber}",f"mainshow{menunumber}",f"text{menunumber}","700x380",f"{fcode}")
     else:
         #showcode_withapp(showcodemain_read,main_name,pycode)
         showcode_withapp(f"{showcodemain_read}",f"mainshow{menunumber}a",f"{fcode}")
@@ -1240,14 +1266,19 @@ exit 0
 
 # Restart popup
 def close_popup():
+    global set_bg
+    global set_fg
+    global set_button_bg
+    global set_button_fg
     mainlanguagerestart = tkinter.Tk()
     mainlanguagerestart.title(f'Restart Application | Python (KhanhNguyen9872)')
     if (os.name == 'nt'):
         mainlanguagerestart.iconbitmap('khanh.ico')
-    mainlanguagerestart.geometry("400x60")
+    mainlanguagerestart.configure(background=f'{set_bg}')
+    mainlanguagerestart.geometry("500x70")
     mainlanguagerestart.resizable(False, False)
-    Label(mainlanguagerestart, text="This change requires a restart of the application!", font=('BOLD')).grid(row=0, sticky=W)
-    CONFIRM1 = Button(mainlanguagerestart, text="  Close program  ", command=close_process).grid(row=1, column=0, sticky=W)
+    Label(mainlanguagerestart, text="This change requires a restart of the application!", background=f'{set_bg}', foreground=f'{set_fg}', font=("Arial", 14, 'bold')).grid(row=0, sticky=W)
+    CONFIRM1 = Button(mainlanguagerestart, text="  Close program  ", background=f'{set_button_bg}', foreground=f'{set_button_fg}', command=close_process).grid(row=1, column=0, sticky=W)
     mainlanguagerestart.mainloop()
 
 # Python Shell on CMD
@@ -1262,7 +1293,7 @@ def controlpanel():
     if (os.name == 'nt'):
         cmd("start cmd /c control")
     else:
-        popup("Error","450x30",' Control Panel not work on Linux!')
+        popup("Error","450x40",' Control Panel not work on Linux!')
 
 # Change language
 def change_language(language):
@@ -1493,12 +1524,17 @@ def change_showcode():
         return showcode_app, showcodemain_read
 
 def menucheck(khanhnguyen9872):
+    global set_bg
+    global set_fg
+    global set_button_bg
+    global set_button_fg
+    global set_entry_bg
     try:
         menunum=int(E1.get())
     except:
-        popup("Error","350x30",f"Vui long chon")
+        popup("Error","450x40",f"Chỉ nhập số thôi nhé!")
     if (menunum>int(total)):
-        popup("Error","350x50",f"Bạn đã chọn vượt quá danh sách đang có!\n      Tối đa: 0-{total}")
+        popup("Error","500x60",f"Bạn đã chọn vượt quá danh sách đang có!\n      Tối đa: 0-{total}")
     elif (menunum==-1):
         if (settings_showcode.is_file()):
             with open(f"{settings_showcode}",'r',encoding='utf-8') as file_name00:
@@ -1662,24 +1698,26 @@ def menucheck(khanhnguyen9872):
         main001.title(f'Settings | {pyver} (KhanhNguyen9872)')
         if (os.name == 'nt'):
             main001.iconbitmap('khanh.ico')
+        main001.configure(background=f'{set_bg}')
         main001.geometry("420x200")
         main001.resizable(False, False)
-        Label(main001, text="Settings", font=('BOLD')).grid(row=0, sticky=W)
-        Label(main001, text=f"Background (Current: {temp_set_back_name}) ").grid(row=1, column=0, sticky=W)
-        CONFIRM2 = Button(main001, text="  Change  ", command=lambda: change_background(str(temp_set_back))).grid(row=1, column=1, sticky=W)
-        Label(main001, text=f"Language (Current: {language})").grid(row=2, column=0, sticky=W)
-        CONFIRM = Button(main001, text="  Change  ", command=lambda: change_language(str(language))).grid(row=2, column=1, sticky=W)
-        Label(main001, text=f"Show Code as Application ({showcode_app}) ").grid(row=3, column=0, sticky=W)
-        CONFIRM1 = Button(main001, text="  Change  ", command=change_showcode).grid(row=3, column=1, sticky=W)
+        Label(main001, text="Settings", background=f'{set_bg}', fg=f'{set_fg}', font=('BOLD')).grid(row=0, sticky=W)
+        Label(main001, text=f"Background (Current: {temp_set_back_name}) ", background=f'{set_bg}', fg=f'{set_fg}').grid(row=1, column=0, sticky=W)
+        CONFIRM2 = Button(main001, text="  Change  ", background=f'{set_button_bg}', fg=f'{set_button_fg}', command=lambda: change_background(str(temp_set_back))).grid(row=1, column=1, sticky=W)
+        Label(main001, text=f"Language (Current: {language})", background=f'{set_bg}', fg=f'{set_fg}').grid(row=2, column=0, sticky=W)
+        CONFIRM = Button(main001, text="  Change  ", background=f'{set_button_bg}', fg=f'{set_button_fg}', command=lambda: change_language(str(language))).grid(row=2, column=1, sticky=W)
+        Label(main001, text=f"Show Code as Application ({showcode_app}) ", background=f'{set_bg}', fg=f'{set_fg}').grid(row=3, column=0, sticky=W)
+        CONFIRM1 = Button(main001, text="  Change  ", background=f'{set_button_bg}', fg=f'{set_button_fg}', command=change_showcode).grid(row=3, column=1, sticky=W)
         main001.mainloop()
     elif (menunum==0):
         main0 = tkinter.Tk()
         main0.title(f'About | {pyver} (KhanhNguyen9872)')
         if (os.name == 'nt'):
             main0.iconbitmap('khanh.ico')
+        main0.configure(background=f'{set_bg}')
         main0.geometry("500x140")
         main0.resizable(False, False)
-        text0 = Text(main0)
+        text0 = Text(main0, background=f'{set_bg}', foreground=f'{set_fg}')
         text0.insert(INSERT, f"Name: Nguyễn Văn Khánh\nFacebook: https://fb.me/khanh10a1\nYoutube: https://youtube.com/c/KhanhNguyen9872_Official\nGithub: https://github.com/khanhnguyen9872\nZalo: 0937927513\nPhone: +84937927513\nGenshin UID: 800983609")
         text0.pack()
         text0.config(state=DISABLED)
@@ -1722,17 +1760,41 @@ def menucheck(khanhnguyen9872):
 
 ### MAIN
 main1 = tkinter.Tk()
-if (temp_set_back == "1"):
-    main1.configure(background='black')
+if (temp_set_back == "0"):
+    set_bg="white"
+    set_fg="black"
+    set_entry_bg="white"
+    set_button_bg="#66453E"
+    set_button_fg="white"
+    set_python_shell_bg="#952108"
+    set_python_shell_fg="white"
+    set_find_fg="red"
+elif (temp_set_back == "1"):
+    set_bg="black"
+    set_fg="white"
+    set_entry_bg="#707070"
+    set_button_bg="#66453E"
+    set_button_fg="white"
+    set_python_shell_bg="#952108"
+    set_python_shell_fg="white"
+    set_find_fg="yellow"
+else:
+    set_bg="white"
+    set_fg="black"
+    set_entry_bg="white"
+    set_button_bg="#66453E"
+    set_button_fg="white"
+    set_python_shell_bg="#952108"
+    set_python_shell_fg="white"
+    set_find_fg="red"
+
+main1.configure(background=f'{set_bg}')
 main1.title(f'Menu | {pyver} (KhanhNguyen9872)')
 if (os.name == 'nt'):
     main1.iconbitmap('khanh.ico')
 main1.geometry("600x420")
 main1.resizable(False, False)
-if (temp_set_back == '1'):
-    text = Text(main1, width = 90, height=17, font=("Helvetica", 14), background="black", foreground="white")
-else:
-    text = Text(main1, width = 90, height=17, font=("Helvetica", 14))
+text = Text(main1, width = 90, height=17, font=("Arial", 14), background=f'{set_bg}', foreground=f'{set_fg}')
 text.insert(INSERT, "\nMenu các chương trình của tôi\nBy KhanhNguyen9872\n\nVui lòng chọn: \n-1. Settings\n0. KhanhNguyen9872\n1. Giải phương trình bậc 2\n2. Tìm ra số lớn nhất, bé nhất\n3. Sắp xếp từ bé đến lớn và ngược lại\n4. Đếm số lần xuất hiện của 1 chuỗi\n5. Mã hóa 1 chuỗi string\n6. Chuyển tiền USD -> VND, VND -> USD\n7. Tìm số giai thừa\n8. Tìm ƯCLN và BCNN\n9. Kiểm tra số nguyên tố\n10. Tạo hình tam giác trong Terminal\n11. Tạo pháo hoa bằng Turtle\n12. Tìm ra chữ có 3 kí tự trở lên trong String\n13. Tính tổng các ước số của N (ngoại trừ N)\n14. Tính lũy thừa a^b bằng hàm pow()\n15. Kiểm tra là tam giác vuông, đều, cân, tù hay nhọn")
 text.insert(INSERT, "\n16. Tìm ra các số chẵn, lẻ (Có lượt bỏ kí tự không phải số)\n17. Đếm số các kí tự In hoa và In thường (Không bao gồm số)\n18. \n19. \n20. ")
 text.insert(INSERT, "\n21. \n22. \n23. \n24. \n25. ")
@@ -1744,38 +1806,21 @@ text.config(state=DISABLED)
 #text.bind('<BackSpace>', lambda _:'break')
 #text.bind('<Return>', lambda _:'break')
 
-if (temp_set_back == "1"):
-    L1 = Label(main1, text="Choose:", background='black', fg='white')
-    L1.pack(side = LEFT)
-    L2 = Label(main1, text="https://fb.me/khanh10a1", background='black', fg='white')
-    L2.pack(side = RIGHT)
-    E1 = Entry(main1, bd=7, background='#787878', fg='white')
-    E1.pack(side = LEFT)
+L1 = Label(main1, text="Choose:", background=f'{set_bg}', fg=f'{set_fg}')
+L1.pack(side = LEFT)
+L2 = Label(main1, text="https://fb.me/khanh10a1", background=f'{set_bg}', fg=f'{set_fg}')
+L2.pack(side = RIGHT)
+E1 = Entry(main1, bd=1, background=f'{set_entry_bg}', fg=f'{set_fg}')
+E1.pack(side = LEFT)
 
-    E1.bind('<Return>', menucheck)
-    E1.bind('<Tab>', find)
-    B = Button(main1, text = "OK", command = lambda: menucheck(''), background='#66453E', fg='white')
-    B.pack(side=LEFT)
-    F = Button(main1, text = "Find", command = lambda: find(''), background='#66453E', fg='white')
-    F.pack(side=LEFT)
-    BB = Button(main1, text = "Python Shell", command = pythonshell, background='#952108', fg='white')
-    BB.pack(side=RIGHT)
-else:
-    L1 = Label(main1, text="Choose:")
-    L1.pack(side = LEFT)
-    L2 = Label(main1, text="https://fb.me/khanh10a1")
-    L2.pack(side = RIGHT)
-    E1 = Entry(main1, bd=7)
-    E1.pack(side = LEFT)
-
-    E1.bind('<Return>', menucheck)
-    E1.bind('<Tab>', find)
-    B = Button(main1, text = "OK", command = lambda: menucheck(''))
-    B.pack(side=LEFT)
-    F = Button(main1, text = "Find", command = lambda: find(''))
-    F.pack(side=LEFT)
-    BB = Button(main1, text = "Python Shell", command = pythonshell)
-    BB.pack(side=RIGHT)
+E1.bind('<Return>', menucheck)
+E1.bind('<Tab>', find)
+B = Button(main1, text = "OK", command = lambda: menucheck(''), background=f'{set_button_bg}', fg=f'{set_button_fg}')
+B.pack(side=LEFT)
+F = Button(main1, text = "Find", command = lambda: find(''), background=f'{set_button_bg}', fg=f'{set_button_fg}')
+F.pack(side=LEFT)
+BB = Button(main1, text = "Python Shell", command = pythonshell, background=f'{set_python_shell_bg}', fg=f'{set_python_shell_fg}')
+BB.pack(side=RIGHT)
 
 main1.mainloop()
 
